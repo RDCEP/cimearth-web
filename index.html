@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+    #graph {width:500px;height:500px;border:1px solid #666;}
+    .output-path {stroke:#666;stroke-width:1px;fill:none;}
+  </style>
+</head>
+<body>
+<div id="graph"></div>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script>
+var data = {"RUS": {"OIL": [0.99796, 0.99882, 1.0022, 1.0028, 1.0027, 1.0044, 1.0057, 1.008, 1.0101, 1.013, 1.0158, 1.0188, 1.0218, 1.0256, 1.0299, 1.0349, 1.04, 1.0464, 1.0522, 1.0586, 1.0659]}, "USA": {"OIL": [0.99861, 0.99651, 1.0047, 1.006, 1.0079, 1.0103, 1.0127, 1.0152, 1.0178, 1.0205, 1.0233, 1.0263, 1.0293, 1.0327, 1.0363, 1.0403, 1.0446, 1.0518, 1.0575, 1.0636, 1.0704]}},
+    margin = {top: 0, right: 0, bottom: 0, left: 0},
+    padding = {top: 40, right: 40, bottom: 0, left: 0},
+    outer_width = 500,
+    outer_height = 500,
+    width = outer_width - padding.left - padding.right,
+    height = outer_height - padding.top - padding.bottom,
+    min_domain = .8,
+    max_domain = 1.2,
+    offset = 0,
+    start_year = 2004,
+    end_year = 2024,
+    x = d3.scale.linear().domain([start_year, end_year]).range([0, width]),
+    y = d3.scale.linear().domain([max_domain, min_domain]).range([0, height]),
+    svg = d3.select("#graph").append("svg")
+      .attr("width", width + padding.left + padding.right)
+      .attr("height", height + padding.top + padding.bottom),
+    graph = svg.append('g')
+      .attr("transform", "translate(" + padding.left + "," + padding.top + ")"),
+    line = d3.svg.line()
+      .x(function(d,i) { return x(i+2004); })
+      .y(function(d,i) {
+        return y(d-offset); }),
+    x_axis_ticks = d3.svg.axis()
+      .scale(x)
+      .orient('top')
+      .tickSize(0)
+      .tickPadding(5)
+      .tickFormat(d3.format('C')),
+    y_axis_ticks = d3.svg.axis()
+      .scale(y)
+      .tickSize(0)
+      .tickPadding(5)
+      .orient('right')
+    ;
+    graph.selectAll('path')
+      .data([data['RUS']['OIL']])
+      .enter().append('path')
+      .attr("d", line)
+      .style('stroke-width', '2px')
+      .classed('output-path', true)
+    ;
+  console.log(data['RUS']['OIL']);
+</script>
+</body>
+</html>
