@@ -86,7 +86,7 @@ class CimEarthData(object):
                     except KeyError:
                         data['region'+str(i)]['commodity'+str(j)] = False
             return json.dumps(
-                data, indent=None
+                data, indent=None, separators=(',', ':')
             )
 
 if __name__ == "__main__":
