@@ -70,15 +70,21 @@ class CimEarthData(object):
             print 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
         else:
             data = {}
-            for reg in [reg1, reg2]:
-                if reg:
-                    data[reg] = {}
-                for com in [com1, com2]:
+            regions = [reg1, reg2]
+            commodities = [com1, com2]
+            print regions, commodities
+            for i in range(len(regions)):
+                data['region'+str(i)] = {'name': regions[i]}
+                for j in range(len(commodities)):
                     try:
-                        this_data = self.panel[reg][com]
-                        data[reg][com] = this_data.T.tolist()
+                        this_data = self.panel[regions[i]][commodities[j]]
+                        _region = data['region'+str(i)]
+                        _region['commodity'+str(j)] = {
+                            'name': commodities[j],
+                            'data': this_data.T.tolist(),
+                        }
                     except KeyError:
-                        pass
+                        data['region'+str(i)]['commodity'+str(j)] = False
             return json.dumps(
                 data, indent=None
             )
