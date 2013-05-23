@@ -69,27 +69,23 @@ var //data = {"RUS": {"OIL": [0.99796, 0.99882, 1.0022, 1.0028, 1.0027, 1.0044, 
     y.domain([d3.max(minmax), d3.min(minmax)]);
     return new_data;
   }
-
-  svg.selectAll('path')
-    .data(data)
-    .enter()
+  var regions = svg.selectAll('regions')
+                  .data(data)
+                  .enter()
+                  .append('g')
+  ;
+  regions
     .append('path')
     .attr("d", function(d, i) {return line(d.data)})
     .style('stroke-width', 2)
     .classed('output-path', true)
     .style("stroke", function(d) { console.log(d.region);return color(d.region); })
   ;
-  svg.selectAll('dots')
-    .data(data)
-    .enter()
-    .append('g')
-    .selectAll('circle')
-    .data(function(d, i) {console.log(d.data); return d.data})
-    .enter()
+  regions
     .append('circle')
     .attr('r', 5)
     .attr('cx', function(d, i) {return x(i+start_year);})
-    .attr('cy', function(d, i) {return y(d);})
+    .attr('cy', function(d, i) {return y(d.data[i]);})
     .style("fill","none")
     .style("stroke","none")
     .style("pointer-events","all")
