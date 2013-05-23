@@ -1,5 +1,5 @@
 import re
-import json
+import simplejson as json
 import pandas as pd
 import numpy as np
 
@@ -61,18 +61,16 @@ class CimEarthData(object):
             ))
 
         if self.dims == 4:
-            self.panel = pd.Panel4D(multi_frames).transpose(2, 1, 0, 3)
+            self.panel = pd.Panel4D(multi_frames).transpose(3, 1, 0, 2)
         else:
-            self.panel = pd.Panel(frames).transpose(2, 0, 1)
+            self.panel = pd.Panel(frames).transpose(1, 0, 2)
 
-    def JsonOut(self, reg1=False, reg2=False, com1=False, com2=False):
-        if (reg1 or reg2 or com1 or com2) is False:
+    # def JsonOut(self, reg1=False, reg2=False, com1=False, com2=False):
+    def JsonOut(self, regions=(), commodities=()):
+        if len(regions) == 0 or len(commodities) == 0:
             print 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
         else:
             data = {}
-            regions = [reg1, reg2]
-            commodities = [com1, com2]
-            print regions, commodities
             for i in range(len(regions)):
                 data['region'+str(i)] = {'name': regions[i]}
                 for j in range(len(commodities)):
@@ -89,8 +87,34 @@ class CimEarthData(object):
                 data, indent=None, separators=(',', ':')
             )
 
+    def BetterJsonOut(self, regions=(), commodities=(), data_type=None):
+        if len(regions) == 0 or len(commodities) == 0:
+            print 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
+        else:
+            data = []
+            for region in regions:
+                for commodity in commodities:
+                    if self.dims == 3:
+                        data.append({
+                            'region': region,
+                            'commodity': commodity,
+                            'data_type': data_type,
+                            'data': list(self.panel.loc[commodity, :, region].values),
+                        })
+                    elif self.dims == 4:
+                        data.append({
+                            'region': region,
+                            'commodity': commodity,
+                            'data_type': data_type,
+                            'data': list(self.panel.loc[commodity, commodity, :, region].T),
+                        })
+            print data
+            return json.dumps(
+                data, indent=' ',
+            )
+
 if __name__ == "__main__":
-    ratio = CimEarthData('ratio')
-    price = CimEarthData('price')
-    json = price.JsonOut(reg1='USA', reg2='RUS', com1='OIL')
-    print json
+    data_type = 'price'
+    data = CimEarthData(data_type)
+    json = data.BetterJsonOut(regions=('USA','MEX'), commodities=('OIL',), data_type=data_type)
+    # print json
