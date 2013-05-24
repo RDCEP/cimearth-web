@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <style>
+    body {font-family:Calibri;font-size:.7em;}
+    #graph {width:500px;height:300px;}
+    .output-path {stroke:#666;stroke-width:1px;fill:none;}
+    #tooltip {background-color:#000;color:#fff;font-weight:bold;
+      position:absolute;padding:2px 5px;}
+    .dot {fill:none; stroke-width:10; stroke:none;pointer-events:all}
+    fieldset {display:inline;border:none;}
+    #data_picker {padding:10px 10px 10px 0;border-top:1px solid #999;
+      margin-top:10px;display:inline}
+  </style>
+</head>
+<body>
+<div id="graph"></div>
+<form id="data_picker">
+  <fieldset>
+    <label for="data_type">Data</label>
+    <select id="data_type" class="data_select">
+      <option value="price" selected>price</option>
+      <option value="expend">expend</option>
+      <option value="emissions">emissions</option>
+    </select>
+  </fieldset>
+  <fieldset>
+    <label for="region1">Regions</label>
+    <select id="region1" class="data_select">
+      <option value="USA" selected>USA</option>
+      <option value="CAN">CAN</option>
+      <option value="OCN">OCN</option>
+      <option value="MEX">MEX</option>
+      <option value="RUS">RUS</option>
+    </select>
+    <select id="region2" class="data_select">
+      <option value="USA">USA</option>
+      <option value="CAN">CAN</option>
+      <option value="OCN">OCN</option>
+      <option value="MEX" selected>MEX</option>
+      <option value="RUS">RUS</option>
+    </select>
+  </fieldset>
+  <fieldset>
+    <label for="commodity1">Commodities</label>
+    <select id="commodity1" class="data_select">
+      <option value="NFM">NFM</option>
+      <option value="STL">STL</option>
+      <option value="ELC">ELC</option>
+      <option value="CHM">CHM</option>
+      <option value="CEM">CEM</option>
+      <option value="OIL" selected>OIL</option>
+    </select>
+    <!--
+    <select id="commodity2" class="data_select">
+      <option value="NFM">NFM</option>
+      <option value="STL">STL</option>
+      <option value="ELC">ELC</option>
+      <option value="CHM">CHM</option>
+      <option value="CEM">CEM</option>
+      <option value="OIL" selected>OIL</option>
+    </select>
+    -->
+  </fieldset>
+<!--  <fieldset>
+    <input id="run_graph" type="button" value="Graph">
+  </fieldset>
+-->
+</form>
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="/static/js/line_graph.js"></script>
+<script src="/static/js/inputs.js"></script>
+</body>
+</html>
