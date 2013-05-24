@@ -16,6 +16,7 @@
 </head>
 <body>
 <div id="graph"></div>
+<h2></h2>
 <form id="data_picker">
   <fieldset>
     <label for="data_type">Data</label>
@@ -29,28 +30,74 @@
     <label for="region1">Regions</label>
     <select id="region1" class="data_select">
       <option value="USA" selected>USA</option>
+      <option value="MEX">MEX</option>
       <option value="CAN">CAN</option>
       <option value="OCN">OCN</option>
-      <option value="MEX">MEX</option>
+      <option value="JPN">JPN</option>
+      <option value="EAA">EAA</option>
+      <option value="SEA">SEA</option>
+      <option value="IND">IND</option>
+      <option value="SOA">SOA</option>
+      <option value="BRA">BRA</option>
+      <option value="LAM">LAM</option>
+      <option value="WEU">WEU</option>
+      <option value="REU">REU</option>
+      <option value="MNA">MNA</option>
+      <option value="AFR">AFR</option>
       <option value="RUS">RUS</option>
     </select>
     <select id="region2" class="data_select">
       <option value="USA">USA</option>
+      <option value="MEX" selected>MEX</option>
       <option value="CAN">CAN</option>
       <option value="OCN">OCN</option>
-      <option value="MEX" selected>MEX</option>
+      <option value="JPN">JPN</option>
+      <option value="EAA">EAA</option>
+      <option value="SEA">SEA</option>
+      <option value="IND">IND</option>
+      <option value="SOA">SOA</option>
+      <option value="BRA">BRA</option>
+      <option value="LAM">LAM</option>
+      <option value="WEU">WEU</option>
+      <option value="REU">REU</option>
+      <option value="MNA">MNA</option>
+      <option value="AFR">AFR</option>
       <option value="RUS">RUS</option>
     </select>
   </fieldset>
   <fieldset>
     <label for="commodity1">Commodities</label>
     <select id="commodity1" class="data_select">
-      <option value="NFM">NFM</option>
-      <option value="STL">STL</option>
-      <option value="ELC">ELC</option>
+      <option value="LND">LND</option>
+      <option value="LAB">LAB</option>
+      <option value="CAP">CAP</option>
+      <option value="NAT">NAT</option>
+      <option value="AGF">AGF</option>
+      <option value="OIL" selected>OIL</option>
+      <option value="GAS">GAS</option>
+      <option value="COL">COL</option>
+      <option value="PTL">PTL</option>
+      <option value="MAN">MAN</option>
       <option value="CHM">CHM</option>
       <option value="CEM">CEM</option>
-      <option value="OIL" selected>OIL</option>
+      <option value="STL">STL</option>
+      <option value="NFM">NFM</option>
+      <option value="ELC">ELC</option>
+      <option value="WND">WND</option>
+      <option value="SLR">SLR</option>
+      <option value="NUC">NUC</option>
+      <option value="HYD">HYD</option>
+      <option value="CFP">CFP</option>
+      <option value="BGA">BGA</option>
+      <option value="PGA">PGA</option>
+      <option value="POI">POI</option>
+      <option value="TRN">TRN</option>
+      <option value="TRL">TRL</option>
+      <option value="TRA">TRA</option>
+      <option value="TRS">TRS</option>
+      <option value="OTS">OTS</option>
+      <option value="GOV">GOV</option>
+      <option value="INV">INV</option>
     </select>
     <!--
     <select id="commodity2" class="data_select">
@@ -70,6 +117,7 @@
 </form>
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="/static/js/cim_ajax.js"></script>
 <script src="/static/js/line_graph.js"></script>
 <script src="/static/js/inputs.js"></script>
 </body>
