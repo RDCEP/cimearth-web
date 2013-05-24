@@ -5,16 +5,63 @@ import pandas as pd
 import numpy as np
 
 
-class CimEarthData(object):
-    def __init__(self, _data_type, _file, start_year=2004):
-        _file = 'BAU'
+class DataCollection(object):
+    def __init__(self, _file='BAU', start_year=2004):
         Z = zipfile.ZipFile('./data/%s.zip' % _file)
         _data = Z.read('%s.dat' % _data_type)
-        _data = re.sub(r'^ +', '', _data)
-        _data = re.sub(r'\n +', '\n', _data)
-        _data = re.sub(r'[ \t]+', ',', _data)
-        _data = re.sub(r'\n+$', '', _data)
-        data_segments = _data.split('\n\n')
+        _data = re.sub(r'^ +', '', _data) # Kill initial whitespace
+        _data = re.sub(r'\n +', '\n', _data) # Kill end of line whitespace
+        _data = re.sub(r'[ \t]+', ',', _data) # Spaces to commas
+        _data = re.sub(r'\n+$', '', _data) # Kill end of file whitespace
+        self._data = _data
+        self.start_year = start_year
+
+
+class DataFile(object):
+    def __init__(self, _data_type, _file='BAU', start_year=2004):
+        Z = zipfile.ZipFile('./data/%s.zip' % _file)
+        _data = Z.read('%s.dat' % _data_type)
+        _data = re.sub(r'^ +', '', _data) # Kill initial whitespace
+        _data = re.sub(r'\n +', '\n', _data) # Kill end of line whitespace
+        _data = re.sub(r'[ \t]+', ',', _data) # Spaces to commas
+        _data = re.sub(r'\n+$', '', _data) # Kill end of file whitespace
+        self._data = _data
+        self.start_year = start_year
+
+    def get_panels(self):
+        # data_segments = _data.split('\n\n')
+        return self._data.split('\n\n')
+
+    def panelize_normal(self):
+        dsegs = self.get_panels()
+        frames = {}
+        col_names = []
+        N = 0
+        for i in range(len(dsegs)):
+            rows = dsegs[i].split('\n')
+            _index = ''
+            data_items = []
+            for j in range(len(rows)):
+                row = rows[j].split(',')
+                if i == 0 and j == 0:
+                    N = len(row)
+                    col_names = row[1:]
+                row += [np.nan] * (N - len(row))
+                if j == 0:
+                    _index = str(int(row[0]) + self.start_year)
+                else:
+                    data_items.append((
+                        row[0], np.array(row[1:], dtype=np.float64)
+                    ))
+            frames[_index] = (pd.DataFrame.from_items(
+                data_items, orient='index', columns=col_names
+            ))
+        return pd.Panel(frames).transpose(1, 0, 2)
+
+    def panelize_jacked(self):
+        panel = self.panelize_normal()
+
+    def panelize_fuct(self):
         frames = {}
         col_names = []
         multi_count = {}
@@ -23,7 +70,6 @@ class CimEarthData(object):
         multi_prev = 0
         multi_frames = {}
         N = 0
-
         for i in range(len(data_segments)):
             rows = data_segments[i].split('\n')
             _index = ''
