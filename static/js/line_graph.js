@@ -47,7 +47,6 @@ function CimEarthLineGraph() {
     tooltip = d3.select('#wrapper').append('div').attr('id', 'tooltip'),
     graph,
     color,
-    dots_layer,
     dots_layers,
     dots,
     paths,
@@ -273,5 +272,5 @@ function CimEarthLineGraph() {
 var line_graph = new CimEarthLineGraph();
 var url = 'http://cimearth.obstructures.org/json/';
 url += Options.cmap + '/' + Options.dtype + '/';
-url += Options.default_region + '/' + Options.default_commodity;
+url += Options.default_region + '/' + Options.default_item;
 line_graph.build(url);
