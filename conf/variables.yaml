@@ -1,0 +1,97 @@
+region:
+  - name: United States
+    code: USA
+    default: true
+  - name: Mexico
+    code: MEX
+  - name: Canada
+    code: CAN
+  - name: Oceania
+    code: OCN
+  - name: Japan
+    code: JAP
+  - name: EAA
+    code: EAA
+  - name: Southeast Asia
+    code: SEA
+  - name: India
+    code: IND
+  - name: SOA
+    code: SOA
+  - name: Brazil
+    code: BRA
+  - name: LAM
+    code: LAM
+  - name: Western Europe
+    code: WEU
+  - name: REU
+    code: REU
+  - name: MNA
+    code: MNA
+  - name: Africa
+    code: Africa
+  - name: Russia
+    code: Russia
+
+commodity:
+  - name: Land
+    code: LND
+  - name: Labor
+    code: LAB
+  - name: Capital
+    code: CAP
+  - name: NAT
+    code: NAT
+  - name: AGF
+    code: AGF
+  - name: Oil
+    code: OIL
+    default: true
+  - name: Natural Gas
+    code: GAS
+  - name: Coal
+    code: COL
+  - name: Petroleum
+    code: PTL
+  - name: MAN
+    code: MAN
+  - name: CHM
+    code: Chemicals
+  - name: Cement
+    code: CEM
+  - name: Steel
+    code: STL
+  - name: Non-ferrous Metal
+    code: NFM
+  - name: Electricity
+    code: ELC
+  - name: Wind
+    code: WND
+  - name: Solar
+    code: SLR
+  - name: Nuclear
+    code: NUC
+  - name: Hydro
+    code: HYD
+  - name: CFP
+    code: CFP
+  - name: BGA
+    code: BGA
+  - name: PGA
+    code: PGA
+  - name: POI
+    code: POI
+  - name: TRN
+    code: TRN
+  - name: TRL
+    code: TRL
+  - name: TRA
+    code: TRA
+  - name: TRS
+    code: TRS
+  - name: OTS
+    code: OTS
+  - name: GOV
+    code: GOV
+  - name: INV
+    code: INV
