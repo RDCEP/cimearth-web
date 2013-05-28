@@ -1,5 +1,6 @@
 import re
 import zipfile
+import itertools
 import simplejson as json
 import pandas as pd
 import numpy as np
@@ -18,157 +19,133 @@ class DataCollection(object):
 
 
 class DataFile(object):
-    def __init__(self, _data_type, _file='BAU', start_year=2004):
-        Z = zipfile.ZipFile('./data/%s.zip' % _file)
-        _data = Z.read('%s.dat' % _data_type)
+    def __init__(self, _dtype, _data_set='BAU', start_year=2004):
+        Z = zipfile.ZipFile('./data/%s.zip' % _data_set)
+        file_type_map = (
+            ('prices', 'price'),
+            ('prices2', 'price'),
+            ('emissions', 'emissions'),
+            ('emission_flows', 'emission_flows'),
+            ('expend_sector', 'expend'),
+            ('expend_region_import', 'expend'),
+            ('expend_sector_import', 'expend'),
+            ('ratio_sector', 'ratio'),
+            ('ratio_region_import', 'ratio'),
+            ('ratio_sector_import', 'ratio'),
+        )
+        _f = [v[1] for i,v in enumerate(file_type_map) if v[0] == _dtype][0]
+        _data = Z.read('%s.dat' % _f)
         _data = re.sub(r'^ +', '', _data) # Kill initial whitespace
         _data = re.sub(r'\n +', '\n', _data) # Kill end of line whitespace
         _data = re.sub(r'[ \t]+', ',', _data) # Spaces to commas
         _data = re.sub(r'\n+$', '', _data) # Kill end of file whitespace
         self._data = _data
         self.start_year = start_year
+        self.dims = 3
+        self.data_type = _dtype
 
-    def get_panels(self):
+    def get_panel_list(self):
         # data_segments = _data.split('\n\n')
-        return self._data.split('\n\n')
+        return [[[cell for cell in row.split(',')] for row in panel.split('\n')] for panel in self._data.split('\n\n')]
 
-    def panelize_normal(self):
-        dsegs = self.get_panels()
-        frames = {}
-        col_names = []
-        N = 0
-        for i in range(len(dsegs)):
-            rows = dsegs[i].split('\n')
-            _index = ''
-            data_items = []
-            for j in range(len(rows)):
-                row = rows[j].split(',')
-                if i == 0 and j == 0:
-                    N = len(row)
-                    col_names = row[1:]
-                row += [np.nan] * (N - len(row))
-                if j == 0:
-                    _index = str(int(row[0]) + self.start_year)
-                else:
-                    data_items.append((
-                        row[0], np.array(row[1:], dtype=np.float64)
-                    ))
-            frames[_index] = (pd.DataFrame.from_items(
-                data_items, orient='index', columns=col_names
-            ))
-        return pd.Panel(frames).transpose(1, 0, 2)
-
-    def panelize_jacked(self):
-        panel = self.panelize_normal()
-
-    def panelize_fuct(self):
+class DataTable(DataFile):
+    def panelize(self, ):
+        panels = self.get_panel_list()
         frames = {}
         col_names = []
         multi_count = {}
-        self.dims = 3
         multi_new = False
         multi_prev = 0
         multi_frames = {}
         N = 0
-        for i in range(len(data_segments)):
-            rows = data_segments[i].split('\n')
-            _index = ''
+        for i in range(len(panels)):
+            year_index = ''
             data_items = []
-            for j in range(len(rows)):
-                row = rows[j].split(',')
+            for j in range(len(panels[i])):
+                _r = panels[i][j]
                 if i == 0 and j == 0:
-                    N = len(row)
-                    col_names = row[1:]
-                row += [np.nan] * (N - len(row))
+                    N = len(_r)
+                    col_names = _r[1:]
+                if j > 1 and (len(_r) > len(panels[i][j-1])):
+                    split = [
+                        len(panels[i][j-1]), j
+                    ]
+                _r += [np.nan] * (N - len(_r)) # only for fucked up tables
                 if j == 0:
                     try:
-                        _index = str(int(row[0]) + start_year)
+                        year_index = str(int(_r[0]) + self.start_year)
                     except ValueError:
                         self.dims = 4
-                        _index = str(row[0])
+                        year_index = str(_r[0])
                         try:
-                            multi_count[_index] += 1
-                            if multi_count[_index] > multi_prev:
+                            multi_count[year_index] += 1
+                            if multi_count[year_index] > multi_prev:
                                 multi_prev += 1
                                 multi_new = True
                             else:
                                 multi_new = False
                         except KeyError:
-                            multi_count[_index] = 0
+                            multi_count[year_index] = 0
                 else:
                     data_items.append((
-                        row[0], np.array(row[1:], dtype=np.float64)
+                        _r[0], np.array(_r[1:], dtype=np.float64)
                     ))
             if self.dims == 4 and multi_new:
-                multi_frames[str(start_year + multi_prev)] = (
-                    pd.Panel(frames).transpose(2, 0, 1)
+                multi_frames[str(self.start_year + multi_prev)] = (
+                    pd.Panel(frames).transpose(1, 0, 2)
                 )
                 frames = {}
-            frames[_index] = (pd.DataFrame.from_items(
+            frames[year_index] = (pd.DataFrame.from_items(
                 data_items, orient='index', columns=col_names
             ))
-
         if self.dims == 4:
-            self.panel = pd.Panel4D(multi_frames).transpose(3, 1, 0, 2)
+            self.panel = pd.Panel4D(multi_frames).transpose(2, 0, 3, 1)
         else:
-            self.panel = pd.Panel(frames).transpose(1, 0, 2)
+            self.panel = pd.Panel(frames).transpose(2, 0, 1)
 
-    # def JsonOut(self, reg1=False, reg2=False, com1=False, com2=False):
-    def JsonOut(self, regions=(), commodities=()):
+    def json_output(self, regions=(), commodities=()):
         if len(regions) == 0 or len(commodities) == 0:
-            print 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
-        else:
-            data = {}
-            for i in range(len(regions)):
-                data['region'+str(i)] = {'name': regions[i]}
-                for j in range(len(commodities)):
-                    try:
-                        this_data = self.panel[regions[i]][commodities[j]]
-                        _region = data['region'+str(i)]
-                        _region['commodity'+str(j)] = {
-                            'name': commodities[j],
-                            'data': this_data.T.tolist(),
-                        }
-                    except KeyError:
-                        data['region'+str(i)]['commodity'+str(j)] = False
-            return json.dumps(
-                data, indent=None, separators=(',', ':')
+            raise Exception(
+                'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
             )
-
-    def BetterJsonOut(self, regions=(), commodities=(), data_type=None):
-        if len(regions) == 0 or len(commodities) == 0:
-            print 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
         else:
+            if self.data_type in ['expend_sector', 'ratio_sector']:
+                self.panel = self.panel.ix[:26, :30]
+            if self.data_type in ['expend_sector_import', 'ratio_sector_import']:
+                self.panel = self.panel.ix[:26, 30:]
+            if self.data_type in ['expend_region_import', 'ratio_region_import']:
+                self.panel = self.panel.ix[26:, 30:]
             data = []
+            _reg_sectors = itertools.product(regions, commodities)
             for region in regions:
                 for commodity in commodities:
                     if self.dims == 3:
                         data.append({
                             'region': region,
                             'commodity': commodity,
-                            'data_type': data_type,
+                            'data_type': self.data_type,
                             'data': list(
-                                self.panel.loc[commodity, :, region].values
+                                # self.panel.loc[commodity, :, region].values
+                                self.panel.loc[region, :, commodity].values
                             ),
                         })
                     elif self.dims == 4:
                         data.append({
                             'region': region,
                             'commodity': commodity,
-                            'data_type': data_type,
+                            'data_type': self.data_type,
                             'data': list(
-                                self.panel.loc[commodity, commodity, :, region]
+                                self.panel.loc[region, :, commodity, commodity]
                                 .T
                             ),
                         })
-            print data
             return json.dumps(
                 data, indent=' ',
             )
 
 if __name__ == "__main__":
     data_type = 'price'
-    data = CimEarthData(data_type, 'BAU')
+    data = DataFile(data_type)
     json = data.BetterJsonOut(
-        regions=('USA','MEX'), commodities=('OIL',), data_type=data_type
+        regions=('USA','MEX'), commodities=('OIL',)
     )
