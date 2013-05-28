@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 {% block graphtitle %}
 <h2>
-  <span class="dtype">{{ graph_title }} ({{ y_unit }})</span>, <span class="region">{{ default_title }}</span>
+  <span class="dtype">{{ graph_title }} ({{ y_unit }})</span>, <span class="{{ item }}">{{ default_title }}</span>
 </h2>
-<h3>Steel</h3>
+<h3>{{ default_subtitle }}</h3>
 {% endblock %}
 {% block data_picker %}
 <form id="data_picker">

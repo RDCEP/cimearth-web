@@ -42,7 +42,7 @@ def prices_region(dataset, cmap):
 
     if dataset == 'prices':
         graph_title = 'Change in prices'
-        y_unit = '%%'
+        y_unit = '%'
     elif dataset == 'emissions':
         graph_title = 'Emissions'
         y_unit = 'unit'
@@ -62,13 +62,17 @@ def prices_region(dataset, cmap):
     return render_template(
         'line_graph.html',
         menu=menu,
+        checks=checks,
+        graph_title=graph_title,
         default_title=default_menu_name,
+        default_subtitle=default_check_name,
         default_region=default_region,
         default_item=default_item,
-        checks=checks,
+
         dataset=dataset,
         cmap=cmap2,
-        graph_title=graph_title,
+        item=item,
+
         y_unit=y_unit,
     )
 
