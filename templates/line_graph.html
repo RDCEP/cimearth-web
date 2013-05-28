@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block graphtitle %}
+<h2>
+  <span class="dtype">{{ graph_title }} ({{ y_unit }})</span>, <span class="region">{{ default_title }}</span>
+</h2>
+<h3>Steel</h3>
+{% endblock %}
+{% block data_picker %}
+<form id="data_picker">
+{{ menu|safe }}
+{{ checks|safe }}
+</form>
+{% endblock %}
+{% block datatype %}Options.dtype = '{{ dataset }}';{% endblock %}
+{% block colormap %}Options.cmap = '{{ cmap }}';{% endblock %}
+{% block graph_defaults %}Options.default_region = '{{ default_region }}';
+Options.default_item = '{{ default_item }}';{% endblock %}
+{% block bodyjs %}
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="/static/js/cim_ajax.js"></script>
+<script src="/static/js/line_graph.js"></script>
+{% block inputjs %}<script src="/static/js/inputs.js"></script>{% endblock %}
+{% endblock %}
