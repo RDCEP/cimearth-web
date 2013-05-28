@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block graphtitle %}
+<h2>
+  <span class="dtype">Change in Price (%)</span>, <span class="region">United States</span>
+</h2>
+<h3>Steel</h3>
+{% endblock %}
+{% block data_picker %}
+{% include 'includes/region_select.html' %}
+{% include 'includes/commodity_checkbox.html' %}
+{% endblock %}
+{% block datatype %}Options.dtype = 'prices';{% endblock %}
+{% block colormap %}Options.cmap = 'commodity';{% endblock %}
+{% block graph_defaults %}Options.default_region = 'USA';
+Options.default_commodity = 'STL';{% endblock %}
+<script src="/static/js/inputs.js"></script>
