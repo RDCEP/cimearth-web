@@ -21,107 +21,19 @@
 <div id="wrapper" class="clearfix">
 {% block graphtitle %}{% endblock %}
 <div id="graph"></div>
-
-<form id="data_picker">
-  {% block data_picker %}
-  <fieldset>
-    <label for="dtype">Data Set</label>
-    <select id="dtype" name="dtype" class="data_select">
-      <option value="prices" selected>Change in Price (%)</option>
-      <option value="expenditures">Expenditures</option>
-      <option value="emissions">Emissions</option>
-    </select>
-  </fieldset>
-  <fieldset>
-    <label for="region1">Regions</label>
-      <input type="checkbox" name="region1" value="USA" checked><label for="region1_USA">United States</label><br>
-      <input type="checkbox" name="region1" value="MEX" checked><label for="region1_MEX">Mexico</label><br>
-      <input type="checkbox" name="region1" value="CAN"><label for="region1_CAN">Canada</label><br>
-      <input type="checkbox" name="region1" value="OCN"><label for="region1_OCN">Oceania</label><br>
-      <input type="checkbox" name="region1" value="JPN"><label for="region1_JPN">Japan</label><br>
-      <input type="checkbox" name="region1" value="EAA"><label for="region1_EAA">EAA</label><br>
-      <input type="checkbox" name="region1" value="SEA"><label for="region1_SEA">Southeast Asia</label><br>
-      <input type="checkbox" name="region1" value="IND"><label for="region1_IND">India</label><br>
-      <input type="checkbox" name="region1" value="SOA"><label for="region1_SOA">SOA</label><br>
-      <input type="checkbox" name="region1" value="BRA"><label for="region1_BRA">Brazil</label><br>
-      <input type="checkbox" name="region1" value="LAM"><label for="region1_LAM">LAM</label><br>
-      <input type="checkbox" name="region1" value="WEU"><label for="region1_WEU">WEU</label><br>
-      <input type="checkbox" name="region1" value="REU"><label for="region1_REU">REU</label><br>
-      <input type="checkbox" name="region1" value="MNA"><label for="region1_MNA">MNA</label><br>
-      <input type="checkbox" name="region1" value="AFR"><label for="region1_AFR">Africa</label><br>
-      <input type="checkbox" name="region1" value="RUS"><label for="region1_RUS">Russia</label><br>
-
-  </fieldset>
-  <fieldset>
-    <label for="commodity1">Commodities</label>
-    <select id="commodity1" name="commodity1" class="data_select">
-      <option value="LND">Land</option>
-      <option value="LAB">Labor</option>
-      <option value="CAP">Capital</option>
-      <option value="NAT">NAT</option>
-      <option value="AGF">AGF</option>
-      <option value="OIL" selected>Oil</option>
-      <option value="GAS">Natural Gas</option>
-      <option value="COL">Coal</option>
-      <option value="PTL">Petroleum</option>
-      <option value="MAN">MAN</option>
-      <option value="CHM">Chemicals</option>
-      <option value="CEM">Cement</option>
-      <option value="STL">Steel</option>
-      <option value="NFM">Non-ferrous Metals</option>
-      <option value="ELC">Electricity</option>
-      <option value="WND">Wind</option>
-      <option value="SLR">Solar</option>
-      <option value="NUC">Nuclear</option>
-      <option value="HYD">Hydro</option>
-      <option value="CFP">CFP</option>
-      <option value="BGA">BGA</option>
-      <option value="PGA">PGA</option>
-      <option value="POI">POI</option>
-      <option value="TRN">TRN</option>
-      <option value="TRL">TRL</option>
-      <option value="TRA">TRA</option>
-      <option value="TRS">TRS</option>
-      <option value="OTS">OTS</option>
-      <option value="GOV">GOV</option>
-      <option value="INV">INV</option>
-    </select>
-    <!--
-    <select id="commodity2" class="data_select">
-      <option value="NFM">NFM</option>
-      <option value="STL">STL</option>
-      <option value="ELC">ELC</option>
-      <option value="CHM">CHM</option>
-      <option value="CEM">CEM</option>
-      <option value="OIL" selected>OIL</option>
-    </select>
-    -->
-  </fieldset>
-<!--  <fieldset>
-    <input id="run_graph" type="button" value="Graph">
-  </fieldset>
--->
-    {% endblock %}
-</form>
+{% block data_picker %}{% endblock %}
 </div>
 {% endblock %}
-{% block bodyjs %}
 <script>
   Options = window.Options || {};
   {% block datatype %}Options.dtype = 'prices';{% endblock %}
   {% block colormap %}Options.cmap = 'region';{% endblock %}
   {% block graph_defaults %}Options.default_region = 'USA';
-Options.default_commodity = 'LND';{% endblock %}
+  Options.default_commodity = 'LND';{% endblock %}
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
-<!--<script src="/static/js/plugins.js"></script>
-<script src="/static/js/main.js"></script>-->
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="/static/js/cim_ajax.js"></script>
-<script src="/static/js/line_graph.js"></script>
-{% block inputjs %}<script src="/static/js/inputs.js"></script>{% endblock %}
-{% endblock %}
+{% block bodyjs %}{% endblock %}
 <script>
 /*
     var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
