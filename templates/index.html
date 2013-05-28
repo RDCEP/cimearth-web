@@ -1,4 +1,27 @@
 {% extends 'base.html' %}
 {% block page %}
-<a href="/prices/region">Change in price by region</a>
+<div id="wrapper" class="clearfix graphless">
+<div id="graph-links">
+<h2>Available graphs</h2>
+<ul>
+  <li><h3>Prices</h3>
+    <ul>
+      <li><a href="/prices/region">in regions, by commodity</a></li>
+      <li><a href="/prices/commodity">of commodities, by region</a></li>
+    </ul>
+  </li>
+  <li><h3>Emissions</h3>
+    <ul>
+      <li><a href="/emissions/region">in regions, by commodity</a></li>
+      <li><a href="/emissions/commodity">of commodities, by region</a></li>
+    </ul>
+  </li>
+  <li><h3>Emission Flows</h3>
+    <ul>
+      <li><a href="/emission_flows/region">by region</a></li>
+    </ul>
+  </li>
+</ul>
+</div>
+</div>
 {% endblock %}
