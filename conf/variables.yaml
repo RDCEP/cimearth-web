@@ -10,28 +10,28 @@ region:
     code: OCN
   - name: Japan
     code: JAP
-  - name: EAA
+  - name: China and Eastern Asia
     code: EAA
   - name: Southeast Asia
     code: SEA
   - name: India
     code: IND
-  - name: SOA
+  - name: Rest of South Asia
     code: SOA
   - name: Brazil
     code: BRA
-  - name: LAM
+  - name: Latin America
     code: LAM
   - name: Western Europe
     code: WEU
-  - name: REU
+  - name: Central Europe
     code: REU
-  - name: MNA
+  - name: Middle East and North Africa
     code: MNA
   - name: Africa
-    code: Africa
+    code: AFR
   - name: Russia
-    code: Russia
+    code: RUS
 
 commodity:
   - name: Land
@@ -55,8 +55,8 @@ commodity:
     code: PTL
   - name: MAN
     code: MAN
-  - name: CHM
-    code: Chemicals
+  - name: Chemicals
+    code: CHM
   - name: Cement
     code: CEM
   - name: Steel
