@@ -14,7 +14,6 @@ function CimEarthInputs() {
     if (_c1) {_cs = _c1.value;}
     else {_rs = _r1.value;}
     line_graph.redraw(Options.dtype, _rs, _cs);
-    $('h2 span').html($('#'+$(this).attr('class')+' option:selected').html());
     var opts = '',
       inputs = $('input[name='+Options.cmap+']:checked');
     for (i=0;i<inputs.length;++i) {
@@ -27,7 +26,7 @@ function CimEarthInputs() {
       var _v = this.value;
       $(this).siblings().children('option').prop('disabled', false);
       $(this).siblings().children('option[value='+_v+']').prop('disabled', true);
-
+      $('h2 span.'+$(this).attr('name')).html($('#'+$(this).attr('name')+' option:selected').html());
       compile_data();
     });
   $('input[type=checkbox]').change(function() {
