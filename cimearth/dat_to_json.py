@@ -6,20 +6,8 @@ import pandas as pd
 import numpy as np
 
 
-class DataCollection(object):
-    def __init__(self, _file='BAU', start_year=2004):
-        Z = zipfile.ZipFile('./data/%s.zip' % _file)
-        _data = Z.read('%s.dat' % _data_type)
-        _data = re.sub(r'^ +', '', _data) # Kill initial whitespace
-        _data = re.sub(r'\n +', '\n', _data) # Kill end of line whitespace
-        _data = re.sub(r'[ \t]+', ',', _data) # Spaces to commas
-        _data = re.sub(r'\n+$', '', _data) # Kill end of file whitespace
-        self._data = _data
-        self.start_year = start_year
-
-
 class DataFile(object):
-    def __init__(self, _dtype, _data_set='BAU', start_year=2004):
+    def __init__(self, data_table, _data_set='BAU', start_year=2004):
         Z = zipfile.ZipFile('./data/%s.zip' % _data_set)
         file_type_map = (
             ('prices', 'price'),
@@ -33,7 +21,7 @@ class DataFile(object):
             ('ratio_region_import', 'ratio'),
             ('ratio_sector_import', 'ratio'),
         )
-        _f = [v[1] for i,v in enumerate(file_type_map) if v[0] == _dtype][0]
+        _f = [v[1] for i,v in enumerate(file_type_map) if v[0] == data_table][0]
         _data = Z.read('%s.dat' % _f)
         _data = re.sub(r'^ +', '', _data) # Kill initial whitespace
         _data = re.sub(r'\n +', '\n', _data) # Kill end of line whitespace
@@ -42,14 +30,15 @@ class DataFile(object):
         self._data = _data
         self.start_year = start_year
         self.dims = 3
-        self.data_type = _dtype
+        self.data_table = data_table
 
     def get_panel_list(self):
         # data_segments = _data.split('\n\n')
         return [[[cell for cell in row.split(',')] for row in panel.split('\n')] for panel in self._data.split('\n\n')]
 
+
 class DataTable(DataFile):
-    def panelize(self, ):
+    def panelize(self):
         panels = self.get_panel_list()
         frames = {}
         col_names = []
@@ -103,17 +92,42 @@ class DataTable(DataFile):
         else:
             self.panel = pd.Panel(frames).transpose(2, 0, 1)
 
+    def json_output2(self, items=(), minors=(), majors=None):
+        if self.data_table in ['expend_sector', 'ratio_sector']:
+            self.panel = self.panel.ix[:26, :30]
+        if self.data_table in ['expend_sector_import', 'ratio_sector_import']:
+            self.panel = self.panel.ix[:26, 30:]
+        if self.data_table in ['expend_region_import', 'ratio_region_import']:
+            self.panel = self.panel.ix[26:, 30:]
+        data = []
+        _reg_sectors = itertools.product(items, minors)
+        for item in items:
+            for minor in minors:
+                if self.dims == 3:
+                    data.append({
+                        'item': item,
+                        'minor': minor,
+                        'data_table': self.data_table,
+                        'data': list(
+                            # self.panel.loc[commodity, :, region].values
+                            self.panel.loc[item, :, minor].values
+                        ),
+                    })
+        return json.dumps(
+            data, indent=' ',
+        )
+
     def json_output(self, regions=(), commodities=()):
         if len(regions) == 0 or len(commodities) == 0:
             raise Exception(
                 'Need to choose 1 or 2 regions, and 1 or 2 commodities.'
             )
         else:
-            if self.data_type in ['expend_sector', 'ratio_sector']:
+            if self.data_table in ['expend_sector', 'ratio_sector']:
                 self.panel = self.panel.ix[:26, :30]
-            if self.data_type in ['expend_sector_import', 'ratio_sector_import']:
+            if self.data_table in ['expend_sector_import', 'ratio_sector_import']:
                 self.panel = self.panel.ix[:26, 30:]
-            if self.data_type in ['expend_region_import', 'ratio_region_import']:
+            if self.data_table in ['expend_region_import', 'ratio_region_import']:
                 self.panel = self.panel.ix[26:, 30:]
             data = []
             _reg_sectors = itertools.product(regions, commodities)
@@ -123,7 +137,7 @@ class DataTable(DataFile):
                         data.append({
                             'region': region,
                             'commodity': commodity,
-                            'data_type': self.data_type,
+                            'data_table': self.data_table,
                             'data': list(
                                 # self.panel.loc[commodity, :, region].values
                                 self.panel.loc[region, :, commodity].values
@@ -133,7 +147,7 @@ class DataTable(DataFile):
                         data.append({
                             'region': region,
                             'commodity': commodity,
-                            'data_type': self.data_type,
+                            'data_table': self.data_table,
                             'data': list(
                                 self.panel.loc[region, :, commodity, commodity]
                                 .T
