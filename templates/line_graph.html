@@ -1,23 +1,76 @@
-{% extends 'base.html' %}
-{% block graphtitle %}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title></title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
+<link rel="stylesheet" href="/static/css/normalize.css">
+<link rel="stylesheet" href="/static/css/main.css">
+<script src="/static/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 7]>
+    <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+<![endif]-->
+
+<div id="wrapper" class="clearfix">
+
 <h2>
-  <span class="dtype">{{ graph_title }} ({{ y_unit }})</span>, <span class="region">{{ default_title }}</span>
+  <span class="graph-title">{{ graph_title.title }} (<span class="unit">{{ graph_title.unit }}</span>)</span>,
+  <span class="select"></span><span class="select2"></span>
 </h2>
-<h3>Steel</h3>
-{% endblock %}
-{% block data_picker %}
+<h3></h3>
+<div id="graph"></div>
 <form id="data_picker">
-{{ menu|safe }}
-{{ checks|safe }}
+{% for menu in menus %}
+{{ menu.head|safe }}
+<select id="{{ menu.inputs.select.id }}" name="{{ menu.inputs.select.name }}" class="{{ menu.inputs.select.class }}">
+{% for option in menu.inputs.options %}
+<option value="{{ option.value }}"{% if option.selected %} selected{% endif %}>{{ option.html }}</option>
+{% endfor %}
+</select>
+{% endfor %}
+{% for check in checks %}
+{{ check.head|safe }}
+{% for input in check.inputs %}
+<input type="{{ input.type }}" name="{{ input.name }}" id="{{ input.id }}" value="{{ input.value }}"{% if input.checked %} checked{% endif %}>
+<label for="{{ input.id }}">{{ input.title }}</label><br>
+{% endfor %}
+{% endfor %}
 </form>
-{% endblock %}
-{% block datatype %}Options.dtype = '{{ dataset }}';{% endblock %}
-{% block colormap %}Options.cmap = '{{ cmap }}';{% endblock %}
-{% block graph_defaults %}Options.default_region = '{{ default_region }}';
-Options.default_item = '{{ default_item }}';{% endblock %}
-{% block bodyjs %}
+</div>
+<script>
+  Options = window.Options || {};
+  Options.data_set = '{{ data_set }}';
+  Options.data_table = '{{ data_table }}';
+  Options.checks = 'commodity';
+  Options.check_axis = '{{ check_axis }}';
+  Options.item_code = '{{ vector_info.item.code }}';
+  Options.item_type = 'region';
+  Options.minor_code = '{{ vector_info.minor.code }}';
+  Options.minor_type = 'commodity';
+</script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="/static/js/cim_ajax.js"></script>
 <script src="/static/js/line_graph.js"></script>
-{% block inputjs %}<script src="/static/js/inputs.js"></script>{% endblock %}
-{% endblock %}
+<script src="/static/js/inputs.js"></script>
+
+<script>
+/*
+    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+    g.src='//www.google-analytics.com/ga.js';
+    s.parentNode.insertBefore(g,s)}(document,'script'));
+*/
+</script>
+</body>
+</html>
