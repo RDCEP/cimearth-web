@@ -55,14 +55,14 @@ function CimEarthLineGraph() {
     y_grid,
     x_axis,
     y_axis,
-    regions = []
+    color_map = []
   ;
   /*
    End variables
    */
-  d3.selectAll('input[name='+Options.cmap+']')
+  d3.selectAll('input[name='+Options.check_axis+']')
     .each(function() {
-      regions.push(d3.select(this).attr('value'));
+      color_map.push(d3.select(this).attr('value'));
     });
   function flat_data(d, o) {
     /*
@@ -70,7 +70,7 @@ function CimEarthLineGraph() {
      */
     _d = [];
     for (i=0; i<d.length; ++i) {
-      _d.push({data: d[i], region: o.region, commodity: o.commodity});
+      _d.push({data: d[i], item: o.item, minor: o.minor});
     }
     return _d;
   }
@@ -119,11 +119,11 @@ function CimEarthLineGraph() {
       d3.rgb(204, 121, 167) // reddish purple
     ];
     color = d3.scale.ordinal()
-      .domain(regions)
+      .domain(color_map)
       .range(color_list);
-    return color(d[Options.cmap])
+    return color(d[Options.check_axis])
       .darker(
-        Math.floor(regions.indexOf(d[Options.cmap])/(color_list.length*2)) *.5
+        Math.floor(color_map.indexOf(d[Options.checks])/(color_list.length*2)) *.5
       );
   }
 
@@ -132,7 +132,7 @@ function CimEarthLineGraph() {
     /*
      Alternates between solid and dashed lines
      */
-    if (Math.floor(regions.indexOf(d[Options.cmap])/7) % 2 == 1) {
+    if (Math.floor(color_map.indexOf(d[Options.check_axis])/7) % 2 == 1) {
       return '2,5';
     }
     return 'none';
@@ -143,9 +143,6 @@ function CimEarthLineGraph() {
     points = d3.max(data, function(d, i) {
       return d.data.length;
     });
-//    color = d3.scale.category20()
-//      .domain(regions);
-
     paths = graph.selectAll('.output-path')
       .data(data, function(d) {return data.indexOf(d);});
     paths.exit().transition()
@@ -168,7 +165,7 @@ function CimEarthLineGraph() {
       .attr('class', 'dot-layer');
     dots_layers.selectAll('.dot').remove();
     dots = dots_layers.selectAll('.dot')
-      .data(function(d, i) { return flat_data(d.data, d); });
+      .data(function(d, i) {return flat_data(d.data, d); });
     dots.exit().remove();
     dots.enter()
       .append('circle')
@@ -179,13 +176,17 @@ function CimEarthLineGraph() {
         return 'dot-' + i + ' dot-' + d.region + ' dot';
       });
   }
-  this.redraw = function(dt, r1, c1) {
+  this.redraw = function(data_set, data_table, axis) {
     /*
      Update graphs on <select> changes.
      */
+    var url = 'http://cimearth.obstructures.org/json/'+data_set+'/'+data_table+'/'+axis.item+'/'+axis.minor;
+    if (axis.major) {
+      url += '/'+axis.major;
+    }
     $.ajax({
       dataType: 'json',
-      url: 'http://cimearth.obstructures.org/json/region/'+dt+'/'+r1+'/'+c1,
+      url: url,
       success: function(data) {
         draw_axes(data);
         draw(data);
@@ -239,8 +240,9 @@ function CimEarthLineGraph() {
               return d3.descending(a.data, b.data);
             })
             .each(function(dd) {
+//              console.log(dd);
               var _h = '<b style="color:' + get_color(dd) + '">';
-              _h += dd[Options.cmap] + '</b>: '+ dd.data + '<br>';
+              _h += dd[Options.check_axis] + '</b>: '+ dd.data + '<br>';
               tooltip
                 .html(tooltip.html() + _h);
             });
@@ -271,6 +273,9 @@ function CimEarthLineGraph() {
  */
 var line_graph = new CimEarthLineGraph();
 var url = 'http://cimearth.obstructures.org/json/';
-url += Options.cmap + '/' + Options.dtype + '/';
-url += Options.default_region + '/' + Options.default_item;
+url += Options.data_set + '/' + Options.data_table + '/';
+url += Options.item_code + '/' + Options.minor_code;
+if (Options.major_code) {
+  url += '/' + Options.major_code;
+}
 line_graph.build(url);
