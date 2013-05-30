@@ -30,7 +30,10 @@ def line_graph(data_set, data_table, check_type):
     _s = []
     for k, v in parser.vectors.iteritems():
         if v != check_type or _c is not None:
-            _s.append(parser.select_menu(v, k))
+            try:
+                _s.append(parser.select_menu(v, k))
+            except:
+                pass
         else:
             _c = parser.checkboxes(v, k)
             check_axis = k
@@ -44,7 +47,7 @@ def line_graph(data_set, data_table, check_type):
         check_axis=check_axis,
         data_set=data_set,
         data_table=data_table,
-        graph_title=graph_title[data_table],
+        graph_info=parser.get_graph_info(data_table),
     )
 
 
