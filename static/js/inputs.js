@@ -2,21 +2,23 @@ function CimEarthInputs() {
   var data_selects = document.getElementsByClassName('data_select'),
     run_graph = document.getElementById('run_graph')
   ;
-  function compile_data() {
-    var _c1 = document.getElementById('commodity'),
-      _r1 = document.getElementById('region'),
-      _cs = [],
-      _rs = [];
-    $('input[type=checkbox]:checked').each(function() {
-      if (_c1) {_rs.push($(this).val());}
-      else {_cs.push($(this).val())}
-    });
-    if (_c1) {_cs = _c1.value;}
-    else {_rs = _r1.value;}
-    line_graph.redraw(Options.dtype, _rs, _cs);
-    $('h2 span').html($('#'+$(this).attr('class')+' option:selected').html());
+  function compile_data(redraw) {
     var opts = '',
-      inputs = $('input[name='+Options.cmap+']:checked');
+      inputs = $('input[type=checkbox]:checked'),
+      checks = [],
+      axis = {item: false, minor: false, major: false};
+    inputs.each(function() {
+      checks.push($(this).val());
+      axis[$(this).attr('name')] = checks;
+    });
+    $('select').each(function() {
+      var obj = $(this);
+      axis[obj.attr('id')] = obj.val();
+      $('h2 span').eq(obj.index()+2).html(obj.children('option:selected').html());
+    });
+    if (redraw) {
+      line_graph.redraw(Options.data_set, Options.data_table, axis);
+    }
     for (i=0;i<inputs.length;++i) {
       opts += $(inputs[i]).next('label').html() + ', '
     }
@@ -24,14 +26,14 @@ function CimEarthInputs() {
   }
   d3.selectAll(data_selects)
     .on('change', function() {
-      var _v = this.value;
-      $(this).siblings().children('option').prop('disabled', false);
-      $(this).siblings().children('option[value='+_v+']').prop('disabled', true);
-
-      compile_data();
+      compile_data(true);
     });
   $('input[type=checkbox]').change(function() {
-    compile_data();
+    compile_data(true);
   })
+  this.draw_initial = function() {
+    compile_data(false);
+  }
 }
-inputs = CimEarthInputs();
+var inputs = new CimEarthInputs();
+inputs.draw_initial();
