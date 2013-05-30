@@ -37,8 +37,7 @@ def line_graph(data_set, data_table, check_type):
         else:
             _c = parser.checkboxes(v, k)
             check_axis = k
-    print parser.vectors
-    print parser.default_vector
+    title, unit = parser.get_graph_info(data_table)
     return render_template(
         'line_graph.html',
         menus=_s,
@@ -47,7 +46,8 @@ def line_graph(data_set, data_table, check_type):
         check_axis=check_axis,
         data_set=data_set,
         data_table=data_table,
-        graph_info=parser.get_graph_info(data_table),
+        title=title,
+        unit=unit,
     )
 
 
