@@ -38,6 +38,12 @@ class DataFile(object):
 
 
 class DataTable(DataFile):
+
+    @property
+    def expend_sector(self):
+        self.panelize()
+
+
     def panelize(self):
         panels = self.get_panel_list()
         frames = {}
@@ -88,17 +94,17 @@ class DataTable(DataFile):
                 data_items, orient='index', columns=col_names
             ))
         if self.dims == 4:
-            self.panel = pd.Panel4D(multi_frames).transpose(2, 0, 3, 1)
+            self.panel = pd.Panel4D(multi_frames).transpose(0, 2, 3, 1)
+            if self.data_table in ['expend_sector', 'ratio_sector']:
+                self.panel = self.panel.ix[:, :, :26, :30]
+            if self.data_table in ['expend_sector_import', 'ratio_sector_import']:
+                self.panel = self.panel.ix[:, :, :26, 30:]
+            if self.data_table in ['expend_region_import', 'ratio_region_import']:
+                self.panel = self.panel.ix[:, :, 26:, 30:]
         else:
             self.panel = pd.Panel(frames).transpose(2, 0, 1)
 
     def json_output2(self, items=(), minors=(), majors=None):
-        if self.data_table in ['expend_sector', 'ratio_sector']:
-            self.panel = self.panel.ix[:26, :30]
-        if self.data_table in ['expend_sector_import', 'ratio_sector_import']:
-            self.panel = self.panel.ix[:26, 30:]
-        if self.data_table in ['expend_region_import', 'ratio_region_import']:
-            self.panel = self.panel.ix[26:, 30:]
         data = []
         _reg_sectors = itertools.product(items, minors)
         for item in items:
@@ -113,6 +119,18 @@ class DataTable(DataFile):
                             self.panel.loc[item, :, minor].values
                         ),
                     })
+                if self.dims == 4:
+                    for major in majors:
+                        data.append({
+                            'item': item,
+                            'minor': minor,
+                            'major': major,
+                            'data_table': self.data_table,
+                            'data': list(
+                                # self.panel.loc[commodity, :, region].values
+                                self.panel.loc[:, item, major, minor].values
+                            ),
+                        })
         return json.dumps(
             data, indent=' ',
         )
@@ -157,9 +175,8 @@ class DataTable(DataFile):
                 data, indent=' ',
             )
 
-if __name__ == "__main__":
-    data_type = 'price'
-    data = DataFile(data_type)
-    json = data.BetterJsonOut(
-        regions=('USA','MEX'), commodities=('OIL',)
-    )
+
+if __name__ == '__main__':
+    c = DataTable('expend_sector')
+    c.panelize()
+    print c.panel
