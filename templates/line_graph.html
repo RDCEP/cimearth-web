@@ -22,7 +22,7 @@
 <div id="wrapper" class="clearfix">
 
 <h2>
-  <span class="graph-title">{{ graph_title.title }} (<span class="unit">{{ graph_title.unit }}</span>)</span>,
+  <span class="graph-title">{{ title }} (<span class="unit">{{ unit }}</span>)</span>,
   <span class="select"></span><span class="select2"></span>
 </h2>
 <h3></h3>
@@ -45,6 +45,7 @@
 {% endfor %}
 </form>
 </div>
+{{ vector_info }}
 <script>
   Options = window.Options || {};
   Options.data_set = '{{ data_set }}';
@@ -52,9 +53,8 @@
   Options.checks = 'commodity';
   Options.check_axis = '{{ check_axis }}';
   Options.item_code = '{{ vector_info.item.code }}';
-  Options.item_type = 'region';
   Options.minor_code = '{{ vector_info.minor.code }}';
-  Options.minor_type = 'commodity';
+  {% if vector_info.major %}Options.major_code = '{{ vector_info.major.code }}';{% endif %}
 </script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
