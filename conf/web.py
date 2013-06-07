@@ -1,5 +1,4 @@
 import yaml
-import HTMLParser
 
 YAML = file('./conf/variables.yaml', 'r')
 CONF_FILE = yaml.load(YAML)
