@@ -1,0 +1,209 @@
+tables:
+  default:
+    vectors:
+      item:
+      - region
+      minor:
+      - commodity
+  prices:
+    title: Growth in price
+    unit: '%'
+    filters:
+      - region
+      - commodity
+  emissions:
+    title: Emissions
+    unit: Gt
+    filters:
+      - region
+      - commodity
+  emission_flows:
+    title: Emission flow
+    unit: Gt
+    vectors:
+      minor:
+      - region
+    filters:
+      - region
+  expend_sector:
+    title: Expenditures by sector
+    unit: $
+    vectors:
+      major:
+      - commodity
+      - commodity_extra
+      minor:
+      - commodity
+  expend_sector_import:
+    title: Import expenditures by sector
+    unit: $
+    vectors:
+      minor:
+      - commodity
+      major:
+      - commodity_import
+  expend_region_import:
+    title: Import expenditures by region
+    unit: $
+    vectors:
+      minor:
+      - region
+      major:
+      - commodity_import
+  ratio_sector:
+    title: Ratio by sector
+    unit: TKTK
+    vectors:
+      major:
+      - commodity
+  ratio_sector_import:
+    title: Import ratio by sector
+    unit: TKTK
+    vectors:
+      minor:
+      - commodity
+      major:
+      - commodity_import
+  ratio_region_import:
+    title: Import ratio by region
+    unit: TKTK
+    vectors:
+      minor:
+      - region
+      major:
+      - commodity_import
+
+region:
+  - name: United States
+    code: USA
+    default: true
+  - name: Mexico
+    code: MEX
+  - name: Canada
+    code: CAN
+  - name: Oceania
+    code: OCN
+  - name: Japan
+    code: JAP
+  - name: China and East Asia
+    code: EAA
+  - name: Southeast Asia
+    code: SEA
+  - name: India
+    code: IND
+  - name: Rest of South Asia
+    code: SOA
+  - name: Brazil
+    code: BRA
+  - name: Latin America
+    code: LAM
+  - name: Western Europe
+    code: WEU
+  - name: Central Europe
+    code: REU
+  - name: Mid-East and N Africa
+    code: MNA
+  - name: Sub-Saharan Africa
+    code: AFR
+  - name: Russia+
+    code: RUS
+
+commodity:
+  - name: Agriculture and Forestry
+    code: AGF
+  - name: Oil
+    code: OIL
+  - name: Natural Gas
+    code: GAS
+  - name: Coal
+    code: COL
+  - name: Petroleum
+    code: PTL
+    default: true
+  - name: Other Manufacturing
+    code: MAN
+  - name: Chemicals
+    code: CHM
+  - name: Cement/mineral Products
+    code: CEM
+  - name: Iron and Steel
+    code: STL
+  - name: Nonferrous Metal
+    code: NFM
+  - name: Electricity
+    code: ELC
+  - name: Wind
+    code: WND
+  - name: Solar
+    code: SLR
+  - name: Nuclear
+    code: NUC
+  - name: Hydro
+    code: HYD
+  - name: CFP
+    code: CFP
+  - name: BGA
+    code: BGA
+  - name: PGA
+    code: PGA
+  - name: POI
+    code: POI
+  - name: TRN
+    code: TRN
+  - name: Land Transport
+    code: TRL
+  - name: Air Transport
+    code: TRA
+  - name: Sea Transport
+    code: TRS
+  - name: Other Services
+    code: OTS
+  - name: Government Services
+    code: GOV
+  - name: INV
+    code: INV
+
+commodity_import:
+  - name: Agriculture and Forestry (Imported)
+    code: AGF_I
+  - name: Oil (Imported)
+    code: OIL_I
+    default: true
+  - name: Natural Gas (Imported)
+    code: GAS_I
+  - name: Coal (Imported)
+    code: COL_I
+  - name: Petroleum (Imported)
+    code: PTL_I
+  - name: Other Manufacturing (Imported)
+    code: MAN_I
+  - name: Chemicals (Imported)
+    code: CHM_I
+  - name: Cement/mineral Products (Imported)
+    code: CEM_I
+  - name: Iron and Steel (Imported)
+    code: STL_I
+  - name: Nonferrous Metal (Imported)
+    code: NFM_I
+  - name: Electricity (Imported)
+    code: ELC_I
+  - name: Land Transport (Imported)
+    code: TRL_I
+  - name: Air Transport (Imported)
+    code: TRA_I
+  - name: Sea Transport (Imported)
+    code: TRS_I
+  - name: Other Services (Imported)
+    code: OTS_I
+  - name: Government Services (Imported)
+    code: GOV_I
+
+commodity_extra:
+  - name: Land
+    code: LND
+  - name: Labor
+    code: LAB
+  - name: Capital
+    code: CAP
+  - name: NAT
+    code: NAT
