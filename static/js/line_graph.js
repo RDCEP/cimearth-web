@@ -70,7 +70,9 @@ function CimEarthLineGraph() {
      */
     _d = [];
     for (i=0; i<d.length; ++i) {
-      _d.push({data: d[i], item: o.item, minor: o.minor});
+      _t = {data: d[i], item: o.item, minor: o.minor};
+      if (o.major) {_t['major'] = o.major;}
+      _d.push(_t);
     }
     return _d;
   }
@@ -176,6 +178,78 @@ function CimEarthLineGraph() {
         return 'dot-' + i + ' dot-' + d.region + ' dot';
       });
   }
+
+
+  function build_initial(data) {
+    y_axis = svg.append('g')
+        .attr('class', 'y axis')
+        .attr('transform', 'translate(-20,0)');
+      y_grid = svg.append('g')
+        .attr('id', 'y_grid')
+        .attr('class', 'grid');
+      x_axis = svg.append("g")
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0,' + (height+20) + ')');
+      graph = svg
+        .append('g')
+        .attr('class', 'output-area');
+      dots_layer = svg
+        .append('g')
+        .attr('class', 'all-dots');
+      draw_axes(data);
+      draw(data);
+      segments = svg.append('g')
+        .attr('class', 'segments')
+        .selectAll('.data-region')
+        .data(data[0].data)
+        .enter();
+      segments.append('rect')
+        .style('fill', 'none')
+        .style('pointer-events', 'all')
+        .attr('width', width / (points - 1))
+        .attr('height', height)
+        .attr('x', function(d, i) {
+          return (i * width / (points - 1)) - (width / (points - 1) / 2);
+        })
+        .attr('y', 0)
+        .on('mouseover', function(d, i) {
+          tooltip.html('');
+          var tdots = d3.selectAll('.dot-'+i)
+            .style('stroke', function(dd, ii) {
+              return get_color(dd);})
+            .style('fill', '#eee')
+            .classed('visible', true)
+            .sort(function(a, b) {
+              return d3.descending(a.data, b.data);
+            })
+            .each(function(dd) {
+              var _h = '<b style="color:' + get_color(dd) + '">';
+              _h += dd[Options.check_axis] + '</b>: '+ dd.data + '<br>';
+              tooltip
+                .html(tooltip.html() + _h);
+            });
+          tooltip
+            .style('left', (i * width / (points - 1) + padding.left + (width / (points - 1) / 2)) + 'px')
+            .style('bottom', (height - d3.select(tdots[0][0]).attr('cy') + padding.bottom + 10) + 'px')
+            .style('opacity', .8);
+        })
+        .on('mouseout', function(d, i) {
+          d3.selectAll('.dot-'+i)
+            .style('stroke', 'none')
+            .style('fill', 'none')
+            .classed('visible', false);
+          tooltip.html('')
+            .style('opacity', 0);
+        });
+      segments.append('g')
+        .attr('transform', 'translate('+width / (points - 1)/2+', 0)')
+        .attr('class', 'grid-roll')
+        .append('line')
+        .attr('x2', 0)
+        .attr('y2', -height);
+  }
+
+
   this.redraw = function(data_set, data_table, axis) {
     /*
      Update graphs on <select> changes.
@@ -197,74 +271,12 @@ function CimEarthLineGraph() {
     /*
      Draws initial graph on page load. Builds hover effects.
      */
-    d3.json(url, function(error, data) {
-      y_axis = svg.append('g')
-        .attr('class', 'y axis')
-        .attr('transform', 'translate(-20,0)');
-      y_grid = svg.append('g')
-        .attr('id', 'y_grid')
-        .attr('class', 'grid');
-      x_axis = svg.append("g")
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + (height+20) + ')');
-      graph = svg
-        .append('g')
-        .attr('class', 'output-area');
-      dots_layer = svg
-        .append('g')
-        .attr('class', 'all-dots');
-      draw_axes(data);
-      draw(data);
-      segments = svg.append('g')
-        .attr('class', 'segments')
-        .selectAll('.data-region')
-        .data(data[0].data)
-        .enter()
-        .append('rect')
-        .style('fill', 'none')
-        .style('pointer-events', 'all')
-        .attr('width', width / (points - 1))
-        .attr('height', height)
-        .attr('x', function(d, i) {
-          return (i * width / (points - 1)) - (width / (points - 1) / 2);
-        })
-        .attr('y', 0)
-        .on('mouseover', function(d, i) {
-          tooltip.html('');
-          var tdots = d3.selectAll('.dot-'+i)
-            .style('stroke', function(dd, ii) {
-              return get_color(dd);})
-            .style('fill', '#eee')
-            .classed('visible', true)
-            .sort(function(a, b) {
-              return d3.descending(a.data, b.data);
-            })
-            .each(function(dd) {
-//              console.log(dd);
-              var _h = '<b style="color:' + get_color(dd) + '">';
-              _h += dd[Options.check_axis] + '</b>: '+ dd.data + '<br>';
-              tooltip
-                .html(tooltip.html() + _h);
-            });
-          tooltip
-            .style('left', (i * width / (points - 1) + padding.left + (width / (points - 1) / 2)) + 'px')
-            .style('bottom', (height - d3.select(tdots[0][0]).attr('cy') + padding.bottom + 10) + 'px')
-            .style('opacity', .8);
-        })
-        .on('mouseout', function(d, i) {
-          d3.selectAll('.dot-'+i)
-            .style('stroke', 'none')
-            .style('fill', 'none')
-            .classed('visible', false);
-            tooltip.html('')
-            .style('opacity', 0);
-        });
-      segments.append('g')
-        .attr('transform', 'translate('+width / (points - 1)/2+', 0)')
-        .attr('class', 'grid-roll')
-        .append('line')
-        .attr('x2', 0)
-        .attr('y2', -height);
+    $.ajax({
+      dataType: 'json',
+      url: url,
+      success: function(data) {
+        build_initial(data);
+      }
     });
   };
 }
