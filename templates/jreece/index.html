@@ -12,8 +12,8 @@
 			}
 
 		function gridDraw() {
-			var cols = 10;
-			var rows = 10;
+			var cols = 12;
+			var rows = 12;
 
 			document.write("<form>");
 			for (var i=0; i<rows; i++) {
@@ -23,7 +23,7 @@
 			  	// while (i == 0) {
 			  	// 	document.write("<select>"+dropdown+"</select>");
 			  	// }
-			    document.write("<input type='text' name='"+String(cols*(j+1) + j)/*Only works for 10x10 grid*/+"' value="+String((i*10)+j)+">");
+			    document.write("<input type='text' name='"+String((i*cols) + j)+"' value="+String((i*cols) + j)+">");
 			  }
 			  document.write("</ul>");
 			}
@@ -94,7 +94,7 @@
 <li><a href="#4">Model 4</a></li>
 </ul>
 
-<div id="chart_div"></div>
+<!-- <div id="chart_div"></div> -->
 
 <script type="text/javascript">
 	gridDraw();
