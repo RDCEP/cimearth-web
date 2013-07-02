@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CIM-EARTH</title>
+	<script>
+		
+		var countries = new Array('US', 'China', 'Japan', 'Germany', 'France', 'Brazil', 'UK', 'Russia', 'Italy', 'India');
+		var dropdown = '';
+
+		for (var n=0; n<(countries.length); n++) {
+				dropdown += "<option>" + countries[n] + "</option>";
+			}
+
+		function gridDraw() {
+			var cols = 10;
+			var rows = 10;
+
+			document.write("<form>");
+			for (var i=0; i<rows; i++) {
+			  document.write("<ul>"); // Mainly in place for styling purposes
+			  document.write("<select>"+dropdown+"</select>");
+			  for (var j=0; j<cols; j++) {
+			  	// while (i == 0) {
+			  	// 	document.write("<select>"+dropdown+"</select>");
+			  	// }
+			    document.write("<input type='text' name='"+String(cols*(j+1) + j)/*only works for 10x10 grid*/+"' value="+String((i*10)+j)+">");
+			  }
+			  document.write("</ul>");
+			}
+			document.write("</form>");
+
+		}
+
+	</script>
+
+	<script src="https://www.google.com/jsapi"></script>
+    <script>
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Oil', 'Agriculture'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'CIM-EARTH Economic Projection'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+
+	<style>
+
+		input{
+			margin-bottom: 5px;
+			margin-left: 5px;
+			margin-right: 5px;
+			width: 40px;
+			border: 1px solid #666;
+        	padding: 2px 3px;      
+        	text-align: right;
+		}
+
+		#models li{
+			font-weight: bold;
+			font-size: 1.5em;
+			display: inline;
+			min-width: auto;
+		}
+
+		#chart_div{
+			float: right;
+			margin-top: 50px;
+			width: 550px;
+			height: 350px;
+		}
+
+	</style>
+</head>
+<body>
+
+<h1>CIM-EARTH</h1>
+
+<ul id="models">
+<li><a href="#1">Model 1</a> |</li>
+<li><a href="#2">Model 2</a> |</li>
+<li><a href="#3">Model 3</a> |</li>
+<li><a href="#4">Model 4</a></li>
+</ul>
+
+<div id="chart_div"></div>
+
+<script type="text/javascript">
+	gridDraw();
+</script>
+
+</body>
+</html>
