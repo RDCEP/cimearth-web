@@ -12,18 +12,19 @@
 			}
 
 		function gridDraw() {
-			var cols = 12;
-			var rows = 12;
+			var cols = countries.length;
+			var rows = 1;
 
 			document.write("<form>");
 			for (var i=0; i<rows; i++) {
 			  document.write("<ul>"); // Mainly in place for styling purposes
-			  document.write("<select>"+dropdown+"</select>");
+			  // document.write("<select>"+dropdown+"</select>");
 			  for (var j=0; j<cols; j++) {
 			  	// while (i == 0) {
 			  	// 	document.write("<select>"+dropdown+"</select>");
 			  	// }
-			    document.write("<input type='text' name='"+String((i*cols) + j)+"' value="+String((i*cols) + j)+">");
+			  	document.write(String(countries[j]) + "<input type='checkbox' name='"+String((i*cols) + j)+ "'>");
+			    // document.write("<input type='text' name='"+String((i*cols) + j)+"' value=0>");
 			  }
 			  document.write("</ul>");
 			}
@@ -88,10 +89,10 @@
 <h1>CIM-EARTH</h1>
 
 <ul id="models">
-<li><a href="#1">Model 1</a> |</li>
-<li><a href="#2">Model 2</a> |</li>
-<li><a href="#3">Model 3</a> |</li>
-<li><a href="#4">Model 4</a></li>
+<li><a href="#1">TRADE</a> |</li>
+<li><a href="#2">BIO</a> |</li>
+<li><a href="#3">ENERGY</a> |</li>
+<li><a href="#4">LIFE</a></li>
 </ul>
 
 <!-- <div id="chart_div"></div> -->
@@ -99,6 +100,8 @@
 <script type="text/javascript">
 	gridDraw();
 </script>
+
+<div id="chart_div"></div>
 
 </body>
 </html>
