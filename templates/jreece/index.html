@@ -1,107 +1,89 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title>CIM-EARTH</title>
-	<script>
-		
-		var countries = new Array('US', 'China', 'Japan', 'Germany', 'France', 'Brazil', 'UK', 'Russia', 'Italy', 'India');
-		var dropdown = '';
+  <title>CIM-EARTH</title>
+  
+  <script>
 
-		for (var n=0; n<(countries.length); n++) {
-				dropdown += "<option>" + countries[n] + "</option>";
-			}
+    var models = new Array('TRADE', 'BIO', 'ENERGY', 'LIFE');
+  	var countries = new Array('United States','Mexico','Canada','Oceania','Japan','China and East Asia','Southeast Asia','India','Rest of South Asia','Brazil','Latin America','Western Europe','Central Europe','Mid-East and N Africa','Sub-Saharan Africa','Russia+');
+    var commodities = new Array('Agriculture and Forestry', 'Oil', 'Natural Gas', 'Coal', 'Petroleum', 'Other Manufacturing', 'Chemicals', 'Cement/mineral Products', 'Iron and Steel', 'Nonferrous Metal', 'Electricity', 'Wind', 'Solar', 'Nuclear', 'Hydro', 'CFP', 'BGA', 'PGA', 'POI', 'TRN', 'Land Transport', 'Air Transport', 'Sea Transport', 'Other Services', 'Government Services', 'INV');
+    var years = new Array();
 
-		function gridDraw() {
-			var cols = countries.length;
-			var rows = 1;
+    for (var i=4; i<=24; i++) {
+        years.push(2000 + i);
+    }
 
-			document.write("<form>");
-			for (var i=0; i<rows; i++) {
-			  document.write("<ul>"); // Mainly in place for styling purposes
-			  // document.write("<select>"+dropdown+"</select>");
-			  for (var j=0; j<cols; j++) {
-			  	// while (i == 0) {
-			  	// 	document.write("<select>"+dropdown+"</select>");
-			  	// }
-			  	document.write(String(countries[j]) + "<input type='checkbox' name='"+String((i*cols) + j)+ "'>");
-			    // document.write("<input type='text' name='"+String((i*cols) + j)+"' value=0>");
-			  }
-			  document.write("</ul>");
-			}
-			document.write("</form>");
+    function drawArr(foo) {
+        for (var k=0; k<foo.length; k++) {
+            document.write("<input type='checkbox' name='" + String(foo[k]) +  "'>" + String(foo[k]));
+        }
+    }
 
-		}
+    function drawModels(models) {
+        for (var m=0; m<models.length; m++) {
+            document.write("<input type='radio' name='model'>" + String(models[m]));
+        }
+    }
 
-	</script>
+  	function drawForm() {
+  		for (var j=0; j<countries.length; j++) {
+            document.write(countries[j] + "<input type='checkbox' name='"+countries[j]+"'>");
+        }
+  	}
+  
+  </script>
 
-	<script src="https://www.google.com/jsapi"></script>
-    <script>
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Year', 'Oil', 'Agriculture'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
-        ]);
+  <style>
 
-        var options = {
-          title: 'CIM-EARTH Economic Projection'
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-
-	<style>
-
-		input{
-			margin-bottom: 5px;
-			margin-left: 5px;
-			margin-right: 5px;
-			width: 40px;
-			border: 1px solid #666;
-        	padding: 2px 3px;      
-        	text-align: right;
-		}
-
-		#models li{
+      /* #models li{
 			font-weight: bold;
 			font-size: 1.5em;
 			display: inline;
 			min-width: auto;
-		}
+		} */
 
-		#chart_div{
-			float: right;
-			margin-top: 50px;
-			width: 550px;
-			height: 350px;
-		}
+      .scenario input[type='checkbox']{
+          margin-left: 5px;
+          margin-right: 2px;
+      }
 
-	</style>
+      .scenario input[type='radio']{
+          margin-left: 8px;
+          margin-right: 3px;
+      }
+
+  </style>
 </head>
+
 <body>
 
-<h1>CIM-EARTH</h1>
+	<ul class="scenario">
+        <li><script>drawModels(models);</script></li>
+        <li><script>drawArr(years);</script></li>
+        <li>Name: <input type="text" name="name"></li>
+        <li>Description: <textarea rows=3 cols=50 name="description" style="display: block;"></textarea></li>
+  		<!-- <li><script>drawForm();</script></li> -->
+        <li><script>drawArr(countries);</script></li>
+        <li><script>drawArr(commodities);</script></li>
+        <hr>
+	</ul>
 
-<ul id="models">
-<li><a href="#1">TRADE</a> |</li>
-<li><a href="#2">BIO</a> |</li>
-<li><a href="#3">ENERGY</a> |</li>
-<li><a href="#4">LIFE</a></li>
-</ul>
 
-<!-- <div id="chart_div"></div> -->
+	<input type="button" value="+" style="font-size: 2em;">
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	
+	<script>
 
-<script type="text/javascript">
-	gridDraw();
-</script>
+  		$('input[type=button]').click(function(e) {
+    		var list = $(this).prev();
+    		var item = list.children().clone();
+    		list.append(item);
+  		});
 
-<div id="chart_div"></div>
-
+	
+	</script>
 </body>
 </html>
