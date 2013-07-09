@@ -16,17 +16,17 @@
 
 		function gridDraw() {
 			var cols = countries.length;
-			var rows = 1;
+			var rows = 10;
 
 			document.write("<form>");
 			for (var i=0; i<rows; i++) {
 			  document.write("<ul>"); // Mainly in place for styling purposes
-			  // document.write("<select>"+dropdown+"</select>");
+			  document.write("<select>"+dropdown+"</select>");
 			  for (var j=0; j<cols; j++) {
 			  	// while (i == 0) {
 			  	// 	document.write("<select>"+dropdown+"</select>");
 			  	// }
-			  	document.write(String(countries[j]) + "<input type='checkbox' name='"+String((i*cols) + j)+ "'>");
+			  	document.write(/*String(countries[j]) + */"<input type='text' name='"+String((i*cols) + j)+ "' value=0>");
 			    // document.write("<input type='text' name='"+String((i*cols) + j)+"' value=0>");
 			  }
 			  document.write("</ul>");
@@ -98,13 +98,13 @@
 <li><a href="#4">LIFE</a></li>
 </ul>
 
-<!-- <div id="chart_div"></div> -->
+<div id="chart_div"></div>
 
 <script type="text/javascript">
 	gridDraw();
 </script>
 
-<div id="chart_div"></div>
+<!--<div id="chart_div"></div>-->
 
 </body>
 </html>
