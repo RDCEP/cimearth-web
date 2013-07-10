@@ -61,7 +61,6 @@
 
       .scenario .title{
           font-family: sans-serif;
-          background-color: #bbb;
           padding-left: 3px;
           padding-right: 2px;
       }
@@ -70,8 +69,9 @@
 </head>
 
 <body>
-
-	<ul class="scenario">
+    <div id="formdiv">
+    <form id="original" class="scenario">
+	<ul>
         <li>
             <script>drawModels(models);</script>
         </li>
@@ -97,19 +97,21 @@
             <script>drawArr(commodities);</script>
         </li>
         <hr>
-	</ul>
-
+    </ul>
+    </form>
+    </div>
 
 	<input type="button" value="+" style="font-size: 2em;">
 	
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 	
 	<script>
-
-  		$('input[type=button]').click(function(e) {
-    		var list = $(this).prev();
-    		var item = list.children().clone();
-    		list.append(item);
+        $(document).ready(function() {
+            var form = $('#original');
+  		    $('input[type=button]').click(function() {
+    		    var newform = form.clone();
+                $("#formdiv").append(newform);
+            });
   		});
 
 	
