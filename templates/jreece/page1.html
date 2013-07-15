@@ -4,30 +4,43 @@
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 
-	<title>CIM-EARTH</title>
+	<title>Grid -- CIM-EARTH</title>
 	<script>
 		
 		var countries = new Array('US', 'China', 'Japan', 'Germany', 'France', 'Brazil', 'UK', 'Russia', 'Italy', 'India');
 		var dropdown = '';
+		var years = new Array();
+
+	    for (var i=4; i<24; i++) {
+	        years.push(2000 + i);
+	    }
 
 		for (var n=0; n<(countries.length); n++) {
 				dropdown += "<option>" + countries[n] + "</option>";
 			}
 
 		function gridDraw() {
-			var cols = countries.length;
+			var cols = 20;
 			var rows = 10;
 
 			document.write("<form>");
-			for (var i=0; i<rows; i++) {
+			for (var i=0; i<=rows; i++) {
 			  document.write("<ul>"); // Mainly in place for styling purposes
-			  document.write("<select>"+dropdown+"</select>");
+			  if (i!=0) {document.write("<select>"+dropdown+"</select>");}
 			  for (var j=0; j<cols; j++) {
-			  	// while (i == 0) {
-			  	// 	document.write("<select>"+dropdown+"</select>");
-			  	// }
-			  	document.write(/*String(countries[j]) + */"<input type='text' name='"+String((i*cols) + j)+ "' value=0>");
-			    // document.write("<input type='text' name='"+String((i*cols) + j)+"' value=0>");
+			  	if (i == 0 && j == 0) {
+			  		document.write("<span id='yearspan'>");
+			  		for (var y=0; y<years.length; y++) {
+			  			document.write("<span class='year'>"+years[y]+"</span>");
+			  		}
+			  		document.write("</span>");
+			  	}
+			  	else if (i==0) {
+
+			  	}
+			  	else {
+			  	document.write("<input type='text' name='"+String((i*cols) + j)+ "' value=0>");
+				}
 			  }
 			  document.write("</ul>");
 			}
@@ -61,14 +74,30 @@
 
 	<style>
 
-		input{
+		#gridspan{
+			white-space: nowrap;
+		}
+
+		input, .year{
 			margin-bottom: 5px;
 			margin-left: 5px;
 			margin-right: 5px;
-			width: 40px;
+			width: 50px;
 			border: 1px solid #666;
         	padding: 2px 3px;      
         	text-align: right;
+		}
+
+		.year{
+			display: inline-block;
+			margin-left: 6px;
+			margin-right: 6px;
+			border: none;
+			border-bottom: 1px solid #666;
+		}
+
+		#yearspan{
+			padding-left: 83px;
 		}
 
 		#models li{
@@ -106,11 +135,13 @@
 <li><a href="#4">LIFE</a></li>
 </ul>
 
-<div id="chart_div"></div>
+<!-- <div id="chart_div"></div> -->
 
+<span id="gridspan">
 <script type="text/javascript">
 	gridDraw();
 </script>
+</span>
 
 <!--<div id="chart_div"></div>-->
 
