@@ -72,6 +72,11 @@
         margin-bottom: 5px;
       }
 
+      textarea{
+        display: block;
+        resize:none;
+      }
+
   </style>
 
   
@@ -91,7 +96,7 @@
                 </li>
                 <li>
                     <span class="title">Description: </span>
-                    <textarea rows=3 cols=50 name="description" class="description" placeholder="Scenario 1 Description" style="display: block;resize:none;"></textarea>
+                    <textarea rows=3 cols=50 name="description" class="description" placeholder="Scenario 1 Description"></textarea>
                 </li>
                 <!-- <li class="countries">
                     <span class="title">Countries: </span>
@@ -100,7 +105,7 @@
                     <span class="title">Commodities: </span>
                 </li> -->
                 <br>
-                <div id="grid_div">
+                <div class="grid-div">
                   <script>gridDraw();</script>
                 </div>
                 <br>
@@ -132,6 +137,9 @@
           $('#scenario-1').find('textarea').attr('name', function(i, val) {
             return val + '-' + scenCount; // Append '-1' to scenario 1 description name
           });
+          $('#scenario-1').find('select').attr('id', function(i, val) {
+            return val + '-' + scenCount; // Append '-1' to scenario 1 description name
+          });
   		    $('#add').click(function() {
                 scenCount++;
                 var newscen = scen.clone(true);
@@ -145,6 +153,7 @@
                     return val + '-' + scenCount;
                 });
                 newscen.attr('id','scenario-' + scenCount);
+                newscen.find('select').attr('id','select-' + scenCount);
                 newscen.find('input.name').attr({'placeholder':'Scenario ' + String(scenCount)});
                 newscen.find('textarea').attr({'placeholder':'Scenario ' + String(scenCount) + ' Description'});
             });
