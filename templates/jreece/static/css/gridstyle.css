@@ -1,0 +1,62 @@
+div.grid-div{
+	/*display: block;*/
+	white-space: nowrap;
+	overflow-x: scroll;
+	width: 100%;
+	/*max-height: 300px;*/
+}
+
+.scenario .grid input[type=text], .year{
+	margin-bottom: 5px;
+	margin-left: 5px;
+	margin-right: 5px;
+	width: 50px;
+	border: 1px solid #666;
+	padding: 2px 3px;
+	text-align: right;
+}
+
+.year{
+	display: inline-block;
+	/*width: 52px;*/
+	margin-left: 6px;
+	margin-right: 6px;
+	border: none;
+	border-bottom: 1px solid #666;
+}
+
+.yearspan{
+	margin: 0px;
+	padding-left: 96px;
+}
+
+#models li{
+	font-weight: bold;
+	font-size: 1.5em;
+	display: inline;
+	min-width: auto;
+}
+
+.checkspan{
+	display: inline-block;
+	width: 165px;
+}
+
+#chart_div{
+	float: right;
+	margin-top: 50px;
+	width: 550px;
+	height: 350px;
+}
+
+span.descriptive{
+	margin-left: 5px;
+}
+
+a:visited{
+    color:#00f;
+}
+
+a:active{
+    color: #999;
+}

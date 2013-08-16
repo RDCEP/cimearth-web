@@ -1,0 +1,1586 @@
+<html>
+<head>
+	<title>RDCEP ASCEF</title>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+	<style>
+
+		*{
+			margin:0;padding:0;
+		}
+
+		#grid-div * input[type=text]{
+			width: 58px !important;
+		}
+
+		#heading{
+			background:url(../static/images/header.png);
+		}
+
+		#heading{
+			position:absolute;
+			top:0;
+			left:0;
+			right:0;
+			padding:0 1em;
+			font:bold 2em/3.5em
+			Helvetica,sans-serif;
+		}
+
+		#heading{
+			color:white;
+			text-shadow:0 0 5px #444;
+			border-bottom:1px solid #262;
+			margin-top:-1px;
+		}
+
+		#heading span{
+			background:20px 8px url(../static/images/RDCEP.png) no-repeat;
+			display:block;
+			float:left;
+		}
+
+		#heading span{
+			padding-left:180px;
+			height:150px;
+			margin-bottom:-100px;
+			margin-right:0.5ex;
+		}
+
+		#heading span{
+			position:relative;
+			z-index: 100;
+		}
+
+		#help-menu {
+			position:absolute;
+			top:7.3em;
+			right:2em;
+			z-index:10;
+			display:block;
+		    list-style-type:none;
+		}
+
+		#help-menu > li {
+			float:left;
+			margin-right:1em;
+			font:0.9em Helvetica,sans-serif;
+		    color:white;
+		    padding:0.4em;
+		    text-decoration:none;
+		    cursor:pointer;
+		    position:relative;
+		    background-color:#596D26;
+		}
+
+		#help-menu > li+li {
+			margin-right:0
+		}
+
+		#help-menu li li {
+			padding:.1em .4em;
+		}
+
+		#help-menu a {
+			color:white;text-decoration:none;
+		}
+
+		#help-menu a:hover, #help-menu li:hover {
+			text-decoration:underline;
+		}
+
+		#help-menu ul {
+			display:none;
+			position:absolute;
+			top:100%;
+			left:0;
+			list-style-type:none;
+		    padding:0 0 .4em;
+		    background-color:inherit;
+		    width:100%;
+		}
+
+		#help-menu li:hover ul {
+			display:block;
+		}
+
+		#sidebar{
+			position:absolute;top:9.5em;left:0;background-color:#eee;
+		    bottom:0;border-right:1px solid #aaa;
+		    /*width:19em;*/width:25em;
+		}
+
+		#back-to-rdcep{
+			position:absolute;
+			height:2.5em;
+			top:7em;
+			left:0;
+			right:0;
+			background-color:#596D26;
+		}
+
+		#back-to-rdcep{
+			border-top:1px solid #697E33;
+			border-bottom:1px solid #697E33;
+			margin-top:-2px;
+			/*padding-left:13em;*/
+			text-align: right;
+		}
+
+		#back-to-rdcep a{
+			color:#eee;
+			font:0.9em/2.8em Helvetica,sans-serif;
+			text-decoration:none;
+			margin: 0.5em;
+		}
+
+		#back-to-rdcep a:hover{
+			color:white;
+		}
+
+		#back-to-rdcep input{
+			border-style: none;
+			border-radius: 5px;
+			height: 2em;
+			padding-left: 5px;
+		}
+
+		#back-to-rdcep input[type=radio]{
+			margin: 0.5em;
+		}
+
+		#submission{
+			position:absolute;top:0;left:0;right:0;bottom:0px;
+		}
+
+		#parameters{
+			position:absolute;top:0;left:0;right:0;bottom:1.8em;overflow:auto;border-bottom:1px
+		solid #ddd;
+		}
+
+		#parameters.has-tabs{
+			padding-top:2em;
+		}
+
+		#parameters .tab {
+		padding:0 3em;/*padding:0 1em;*/
+		}
+
+		#submission h2{
+			font:bold 0.8em Helvetica,sans-serif;padding:1.5em 0 0.5em;
+		}
+
+		#submission li{
+			list-style-type:none;font:0.8em
+		Helvetica,sans-serif;position:relative;padding:0 0 1em;
+		}
+
+		#submission #parameters input,#submission #parameters .fd-slider{
+			width:100%;
+		}
+
+		#submission
+		.label{
+			width:6em;text-align:right;color:#666;position:absolute;right:0;bottom:0;
+		}
+
+		#submission label
+		{
+			width:15em;display:block;padding-right:/*6em*/9em;position:relative;
+		}
+
+		#submission select{
+			width:100%;
+		}
+
+		#submission sub,#submission sup{
+			font-size:0.7em;
+		}
+
+		#controls{
+			position:absolute;bottom:0px;height:1.5em;left:0;right:0;text-align:right;
+		}
+
+		#controls{
+			padding-top:0.4em;border-bottom:1px solid #999;
+		}
+
+		#controls input{
+			margin-right:0.4em;
+		}
+
+		#runs{
+			position:absolute;left:0;bottom:0;right:0;z-index:10;z-index:10;overflow:auto;height:0px;
+		}
+
+		#runs label{
+			background-color:#eee;border-top:1px solid #bbb;font:0.8em/30px
+		sans-serif;
+		}
+
+		#runs label{
+			position:relative;display:block;padding:10px 30px;
+		}
+
+		#runs li{
+			list-style-type:none;
+		}
+
+		#runs li img{
+			position:absolute;top:1.5em;right:1em;
+		}
+
+		#runs li
+		.slab{
+			position:absolute;top:1.5em;left:1em;width:0.8em;height:0.8em;border:1px solid
+		#000;
+		}
+
+		#runs li input{
+			position:absolute;right:15px;top:20px;
+		}
+
+		#content{
+			position:absolute;
+			top:9.5em;
+			right:0;
+			bottom:0;
+			overflow:auto;
+		    left:0em;
+		    /*left:19em;*/
+		}
+
+		#content .graph{
+			float:left;
+		}
+
+		#content .initial{
+			position:absolute;background-color:#eee;font:1em/1.5em
+		Helvetica,sans-serif;
+		}
+
+		#content
+		.initial{
+			top:3em;left:4em;bottom:1em;right:4em;border-radius:1em;padding:2em;
+		}
+
+		#content .initial p{
+			margin-bottom:1em;
+		}
+
+		#content.hasruns .initial{
+			display:none;
+		}
+
+		#content.hasnoruns #four-graphs{
+			display:none;
+		}
+
+		#content.hasnoruns #custom-graph{
+			display:none;
+		}
+
+		#content.hasnoruns #download-data{
+			display:none;
+		}
+
+		#content.hasnoruns .tabs{
+			display:none !important;
+		}
+
+		#content .tabs{
+			background-color:#eee;margin-left:1px;
+		}
+
+		/*#content .tabs .selected{
+			background-color:#fff;
+			}
+			-
+		#content>div>div>div{
+			display:none !important;
+		}*/
+
+		#download-data{
+			position:absolute;right:1em;bottom:0;
+		}
+
+		/*#download-data input{
+		display:block;border:0px solid
+		red;background-color:#eee;border:1px solid #ccc;
+		}*/
+
+		/*#download-data input{
+			font:0.7em
+		Helvetica,sans-serif;padding:0.5em;border-bottom:none;
+		}*/
+
+		/*#download-data input{
+			cursor:pointer;
+		}*/
+
+		#download-data textarea{
+			display:none;
+		}
+
+		#four-graphs{
+			position:absolute;top:2em;left:1px;right:0;bottom:0;
+		}
+
+		#custom-graph{
+			position:absolute;top:2em;left:1px;right:0;bottom:0;overflow:hidden;
+		}
+
+		#graph-controls{
+			position:absolute;bottom:0;left:0px;right:0;height:6.5em;background-color:#eee;
+		}
+
+		#graph-controls{
+			border-top:1px solid #ccc;font:0.8em Helvetica,sans-serif;
+		}
+
+		#graph-controls div{
+			float:left;width:15em;border-right:1px solid #ccc;padding:1em
+		2em;height:5em;
+		}
+
+		#graph-controls h2{
+			font:bold 1em Helvetica,sans-serif;text-transform:uppercase;
+		}
+
+		#graph-controls label,#graph-controls select{
+			width:15em;display:block;
+		}
+
+		#graph-controls label{
+			padding:0.5em 1em;font-size:0.9em;
+		}
+
+		#graph-controls div.short{
+			width:7.5em;
+		}
+
+		/*#graph-controls .short input,#graph-controls .short select{
+			width:7.5em;
+		}*/
+
+		#overlay{
+			opacity:0;display:none;
+		}
+
+		#overlay .slug{
+			position:fixed;top:0;left:0;right:0;bottom:0;background-color:#000;
+		}
+
+		#overlay .slug{
+			opacity:0.5;z-index:1000;
+		}
+
+		#overlay .article{
+			padding:3em;
+			width:60em;
+			margin:0
+			auto;
+			position:absolute;
+			overflow:auto;
+		}
+
+		#overlay .article{
+			top:200px;left:0;right:0;bottom:0;border-left:1px solid
+		#999;border-right:1px solid #999;
+		}
+
+		#overlay .article{
+			background-color:#fff;font:0.9em/1.7em
+		Helvetica,sans-serif;z-index:2000;
+		}
+
+		#overlay .article h1{
+			font:1.5em/2.5em Helvetica,sans-serif;
+		}
+
+		#overlay .article h2{
+			font:bold 1em/2.5em
+		Helvetica,sans-serif;text-transform:uppercase;
+		}
+
+		#overlay .article h3{
+			font:bold 1em/2.5em Helvetica,sans-serif;color:#333;
+		}
+
+		#overlay .article h4{
+			font:bold 0.9em/2.5em Helvetica,sans-serif;color:#333;
+		}
+
+		#overlay .article h5{
+			font:bold 0.8em/2.5em Helvetica,sans-serif;color:#333;
+		}
+
+		#overlay .article p{
+			margin-bottom:1em;
+		}
+
+		#overlay .tabs{
+			background-color:#eee;margin-left:1px;
+		}
+
+		#overlay .tabs .selected{
+			background-color:#fff;
+		}
+
+		#hide-help{
+			position:absolute;top:0.5em;right:1.5em;color:#222;font:0.9em
+		Helvetica,sans-serif;
+		}
+
+		#MathJax_Message{
+			display:none !important;
+		}
+
+		.tick-wrap {
+			position:absolute;left:8px;right:8px;
+		}
+
+		.tick{
+			position:relative;top:-.5em;color:#f00;font:1em
+		Helvetica,sans-serif;text-align:center;
+		    display:block;width:100%;
+		}
+
+
+		.tabs{
+			height:2.4em;font:0.8em/1em
+		Helvetica,sans-serif;position:absolute;top:0;left:0;right:0;
+		}
+
+		.tabs{
+			background-color:#fff;border-bottom:1px solid #ccc;
+		}
+
+		.tabs a{
+			text-decoration:none;color:#000;display:block;float:left;padding:0.8em;
+		}
+
+		.tabs a{
+			border-right:1px solid transparent;border-left:1px solid transparent;
+		}
+
+		.tabs a.selected{
+			background-color:#eee;border-color:#ccc;
+		}
+
+		.tab.notselected{
+			display:none;
+		}
+
+
+		.disabled,.disabled .label {
+			color:#999999!important;
+		}
+
+		/*#runs li .clickable-run-input {
+			position:relative;right:auto;top:auto;
+		}*/
+
+
+		.help-button {
+			position:absolute;right:-4.5em;top:1em;padding:.5em 1em .5em;
+		    background-color:#fff;color:#999;cursor:pointer;font-weight:bold;
+		    font-size:.9em;text-align:right;
+		}
+
+		#help-wrapper {
+			position:absolute;left:26em;
+		}
+
+		.help-text {
+			padding:.5em 1em;background-color:#fff;border:1px solid #ccc;
+		    font-family:Helvetica,sans-serif;font-size:.9em;width:25em;display:none;
+		}
+
+
+		.maximum-range-value,.minimum-range-value {
+			font-size:.6em;
+		}
+
+		.maximum-range-value {
+			text-align:right;
+		}
+
+		.minimum-range-value {
+			float:left;
+		}
+
+		#formdiv{
+			padding-left: 2em;
+			padding-right: 2em;
+			padding-bottom: 2em;
+		}
+
+		#formdiv > .title{
+			/*margin-left: 0.5em;*/
+			font-family: sans-serif;
+		}
+
+		ul.scenario{
+			/*background-color: #ddd;*/
+			padding-top: 0.5em;
+			/*padding-top: 1.5em;*/
+			padding-bottom: 1.5em;
+			border-bottom: 1px solid #666;
+		}
+
+		.scenario li{
+			/*color: white;*/
+			font-family: sans-serif;
+			list-style-type: none;
+		}
+
+		.scenario li:nth-child(2){
+			margin-top: 0.7em;
+		}
+
+		.scenario textarea{
+			display: block;
+		}
+
+		body{
+			background-color: #eee;
+		}
+
+		footer{
+			text-align: center;
+			font-family: sans-serif;
+			color: #777;
+			font-size: 0.8em;
+			padding: 1.5em 0em;
+			margin-top: 2em;
+			border-top: 3px double #666;
+			width: 80em;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		strong{
+			text-decoration: underline;
+		}
+
+		#big{
+			padding-left: 2em;
+		}
+
+		.chart_div{
+			background-color: #eee;
+		}
+
+	</style>
+
+	<script>
+
+	    var models = new Array('TRADE', 'BIO', 'ENERGY', 'LIFE');
+	  	var countries = new Array('United States','Mexico','Canada','Oceania','Japan','China and East Asia','Southeast Asia','India','Rest of South Asia','Brazil','Latin America','Western Europe','Central Europe','Mid-East and N Africa','Sub-Saharan Africa','Russia+');
+	    var commodities = new Array('Agriculture and Forestry', 'Oil', 'Natural Gas', 'Coal', 'Petroleum', 'Other Manufacturing', 'Chemicals', 'Cement/mineral Products', 'Iron and Steel', 'Nonferrous Metal', 'Electricity', 'Elec-Wind', 'Elec-Solar', 'Elec-Nuclear', 'Elec-Hydro', 'Coal-fired Power', 'Base Gas', 'Peak Gas', 'Peak Oil', 'Transmission', 'Land Transport', 'Air Transport', 'Sea Transport', 'Other Services', 'Government Services', 'Investment'); // These are all electricity sources, maybe indicate that to users
+	    var regionsArr = new Array('AFR','BRA', 'CAN', 'EAA', 'IND', 'JAP', 'LAM', 'MEX', 'MNA', 'OCN', 'REU', 'RUS', 'SEA', 'SOA', 'USA', 'WEU');
+	    var years = new Array();
+
+	    for (var i=4; i<=24; i++) {
+	        years.push(2000 + i);
+	    }
+
+	    function drawArr(list, object) {
+	        for (var k=0; k<list.length; k++) {
+	            object.append("<input type='checkbox' name='" + String(list[k]) +  "'>" + String(list[k]));
+	        }
+	    }
+
+	    function drawModels(models) {
+	        for (var m=0; m<models.length; m++) {
+	        	if (models[m] == 'BIO') {
+	        		$('.models').append(
+	        			"<input type='radio' name='model' disabled value='" + models[m] + "' disabled>" + "<span id='BIO' style='opacity:0.5;'>" + String(models[m])) + "</span>";
+	        	}
+	        	else {
+	            	$('.models').append("<input type='radio' name='model' value='"+models[m]+"'>" + String(models[m]));
+	        	}
+	        }
+	    }
+
+	  	function drawForm() {
+	  		for (var j=0; j<countries.length; j++) {
+	            document.write(countries[j] + "<input type='checkbox' name='"+countries[j]+"'>");
+	        }
+	  	}
+
+  	</script>
+
+  	<link rel="stylesheet" href="{{ url_for('static', filename='css/gridstyle.css') }}" type="text/css">
+
+  	<script src="{{ url_for('static', filename='js/gridscript.js') }}"></script>
+
+	<style>
+
+		.yearspan{
+			margin: 0px;
+			padding-left: 88px;
+		}
+
+		.scenario .grid input[type=text]{
+			margin-bottom: 5px;
+			margin-left: 5px;
+			margin-right: 5px;
+			width: 58px;
+			border: 1px solid #666;
+			padding: 2px 3px;
+			text-align: right;
+		}
+
+		#feedback{
+	        font-size: 1.25em;
+	        font-family: arial;
+	        clear: both;
+	        padding-top: 9.5em;
+	        padding-left: 1.6em;
+	    }
+
+	    .setRowVal, .resetVal{
+	    	text-align: right;
+	    }
+
+
+
+	</style>
+
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="{{ url_for('static', filename='js/plotscript.js') }}"></script>
+
+	<script type="text/javascript">
+
+		// function drawGraph(obj) {
+		// 	var b = JSON.stringify(formatPoints(obj));
+		// }
+
+		var a = {"AFR": zeros};
+		var b = formatPoints(a);
+
+	</script>
+
+	<script>
+
+		  google.load("visualization", "1", {packages:["corechart"]});
+	      google.setOnLoadCallback(drawChart);
+	      function drawChart() {	
+	    //       var data = google.visualization.arrayToDataTable([            	
+				 //  ['Year', 'Sales', 'Expenses'],	 
+				 //  ['2004',  1000,      400],	  	 
+				 //  ['2005',  1170,      460],	  	 
+				 //  ['2006',  660,       1120],	     
+				 //  ['2007',  1030,      540]	 
+			  // ]);
+			  var data = google.visualization.arrayToDataTable(b);
+	  
+	          var options = {
+	            title: 'Carbon Taxes',
+	            backgroundColor: '#eee'
+	          };
+	  
+	          var chart = new google.visualization.LineChart(document.getElementById('chart_div-1'));
+	          chart.draw(data, options);
+ 	  	  }
+
+	</script>
+
+    <script type="text/javascript">
+
+    	function drawGraph(raw) {
+    		// document.write(raw);
+    		// for (var i in raw) {
+    		// 	document.write(raw[i]+" "+typeof raw[i]+"<br>");
+    		// }
+    		var data = google.visualization.arrayToDataTable(raw);
+    		// var chart = new google.visualization.LineChart(document.getElementById('chart_div-1'));
+    		var chart = new google.visualization.LineChart(document.getElementById('chart_div-1'));
+    		// google.visualization.events.addListener(chart, 'ready', chartReadyHandler);
+    		
+    		var options = {
+	            title: 'Carbon Taxes',
+	            backgroundColor: "#eee"
+	        };
+
+    		chart.draw(data, options);
+    	}
+
+    </script>
+
+</head>
+<body>
+
+	<h1 id="heading"> <span>RDCEP</span> :: <!-- <a href="/"> -->ASCEF Scenario Submission Page<!-- </a> --></h1>
+	<div id="back-to-rdcep">
+		<!-- <a href="#"><span class="title">Email: <input type="email" id="email" name="email" action="output"></span></a>
+		<a href="#">
+			<span class="title">Model:</span><span class="models"><script>drawModels(models);</script></span></a> -->
+		<a href="http://github.com/RDCEP/cimearth-web">Source</a>
+		<a href="http://rdcep.org">Back to RDCEP</a>
+	</div>
+	<div id="big">
+	<div id="feedback"></div>
+	<div id="formdiv">
+		<span class="title"><strong>Currently running ASCEF Release 1.5.5</strong></span><br>
+		<span class="title">Email: <input type="email" id="email" name="email" action="output"></span><br>
+		<span class="title">Model: </span><span class="models"><script>drawModels(models);</script></span>
+	    <form id="form" method="POST" action="output" onSubmit="return false">
+	      <!-- <span class="title">Email: <input type="email" id="email" name="email" action="output"></span><br> -->
+<!-- 	      <span class="title">Choose a Model:</span><br> -->
+	      <!-- <span class="models"></span> -->
+<!-- 	      <hr> -->
+	      <ul class="scenario" id="scenario-1">
+	      		<div class="chart_div" id="chart_div-1" style="width: 450px; height: 200px; float:right; margin-top: 0; margin-bottom: 1.5em;"></div>
+	            <!-- <li class="years"><span class="title">Years: </span></li> -->
+	            <li>
+	                <span class="title">Scenario Name: </span>
+	                <input type="text" name="name" class="name" placeholder="Scenario 1">
+	            </li>
+	            <li>
+	                <span class="title">Description: </span>
+	                <textarea rows=3 cols=50 name="description" class="description" placeholder="Scenario 1 Description"></textarea>
+	            </li>
+	            <!-- <li class="countries"><span class="title">Countries: </span></li> -->
+	            <!-- <li class="commodities"><span class="title">Commodities: </span></li> -->
+	            <br>
+	            Enter carbon taxes in the grid below. Data points are in $1000/tCO2.<br><b>Assigning the same region to multiple rows will not work.</b> <br><br>
+	            Plot points by region/year.<br><br>
+	            <div class="grid-div">
+	              <script>gridDraw();</script>
+	            </div>
+	            <br>
+	            <input class="addRow" type="button" value="add row">
+	            <input type="button" class="rmScen" value="remove scenario"> |
+	            
+														<!-- add "all" option to set row dropdown -->
+	            										<!-- make background less gray (try "#eee") -->
+	            										<!-- javascript "onChange" events, and "addRow" event, "setAll" event to update the graph -->
+	            										<!-- style form better -- steal CSS etc. -->
+	            										<!-- *Update* graph, don't draw it again -->
+
+	            set row <select class="setRowSel"><option value="All">All</option><option value="AFR">AFR</option><option value="BRA">BRA</option><option value="CAN">CAN</option><option value="EAA">EAA</option><option value="IND">IND</option><option value="JAP">JAP</option><option value="LAM">LAM</option><option value="MEX">MEX</option><option value="MNA">MNA</option><option value="OCN">OCN</option><option value="REU">REU</option><option value="RUS">RUS</option><option value="SEA">SEA</option><option value="SOA">SOA</option><option value="USA">USA</option><option value="WEU">WEU</option></select>
+	            to value: <input type="text" class="setRowVal">
+	            <input type="button" class="resetRow" value="set"> |
+	            <input type="button" class="graphUpdate" value="UPDATE GRAPH">
+
+	        </ul>
+	    </form>
+	</div>
+
+	<input id="addScen" type="button" value="Add New Scenario" style="font-size: 2em;"><br>
+    <input type="button" id="submitAll" value="Submit All" style="font-size: 2em;">
+
+    
+
+    <footer>
+
+    	<p><i>RDCEP: ASCEF Scenario Submission Page</i> by<br>Jack Reece, Kyle Chard, Alison Brizius, Nathan Matteson, 2013</p>
+
+    </footer>
+</div>
+
+	<script>
+
+	$(document).ready(function() {
+            var row = $('ul.grid input[type=text]').parents('ul.grid').clone(true, true);
+            var scenCount = 1;
+            $('.addRow').on('click', function() {
+                
+                var rowCount = $(this).parent().find('.grid-div ul.grid').length;/* Parent of "this" is current scenario, find children that are rows *//* Number of "ul.grid"s represents number of rows */ /* Account for first row, "yearspan" */
+                var newrow = row.clone(true, true);
+                if (rowCount >= (regionsArr.length)+1) {
+                    alert("You may not add more rows to this scenario.");
+                }
+                else {
+                    newrow.find('input').attr('name', function(i, val) {
+                        return val + '-' + scenCount + '-' + rowCount;
+                    });
+                    newrow.find('select').attr('name', function(i, val) {
+                        return val + '-' + rowCount;
+                    });
+                    newrow.find('select').children('option').eq(rowCount-1).attr('selected', true);
+                    newrow.appendTo($(this).parent().find('.grid-div'));
+                    
+                }
+
+            });
+            var scen = $('#scenario-1').clone(true, true); // Set aside clone of scenario with standalone names ('name', 'description', '0', etc.)
+            $('#scenario-1').find('input').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 input names
+            });
+            $('#scenario-1').find('textarea').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 description name
+            });
+            $('#scenario-1').find('select').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 description name
+            });
+    		    $('#addScen').on('click', function() {
+                  scenCount++;
+                  var newscen = scen.clone(true, true);
+                  $("#form").append(newscen);
+                  var index = $('ul.scenario').length; // Count clones
+                  var inputs = newscen.find('input'); // Grab all inputs in current clone
+                  inputs.attr('name', function(i, val) {
+                      return val + '-' + scenCount; // Add -X to all input names (eg, 2004 -> 2004-1)
+                  });
+                  newscen.find('textarea').attr('name', function(i, val) {
+                      return val + '-' + scenCount;
+                  });
+                  newscen.attr('id','scenario-' + scenCount);
+                  newscen.find('select').attr('id','select-' + scenCount);
+                  newscen.find('input.name').attr({'placeholder':'Scenario ' + String(scenCount)});
+                  newscen.find('textarea').attr({'placeholder':'Scenario ' + String(scenCount) + ' Description'});
+                  newscen.find('select').attr('name', function(i, val) {
+                    return val + '-' + scenCount;
+                  });
+                  newscen.find('.chart_div').attr('id', 'chart_div-'+scenCount);
+                  var chart = new google.visualization.LineChart(document.getElementById('chart_div-'+scenCount));
+                  chart.draw;
+              
+            });
+            
+            $('#submitAll').on('click', function() {
+                var scenObj = {};
+                scenObj['model'] = $('input[type=radio]:checked').val();  
+                scenObj['email'] = $('input#email').val();
+                $('ul.scenario').each(function() {
+                  var rowObj = {};
+                  rowObj["Name"] = $(this).find('.name').val();
+                  rowObj["Description"] = $(this).find('.description').val();
+                  $('span.row').each(function(i) {
+                    var smallArr = new Array();
+                    $(this).children('input[type=text]').each(function(i) {
+                      smallArr.push($(this).val());
+                    });
+                    rowObj[$(this).children('select').val()] = smallArr;
+                  });
+                  scenObj[$(this).attr('id')] = rowObj;
+                });
+                alert('thank you!');
+                // document.write(JSON.stringify(scenObj)); // Useful for presenting
+                $.ajax({  type: "POST",
+                  url: "output",
+                  data: JSON.stringify(scenObj),
+                  dataType: "json",
+                  headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                  success: function(output) {
+                    $('#feedback').css({'color':'#080'});
+                    	var opstr = '';
+                    	for (var i=0; i<output['id'].length; i++) {
+                      	opstr += output['id'][i] + ', ';
+                    }
+                    opstr = opstr.substring(0, opstr.length - 2);
+                    // $('#feedback').css({'padding': '50px','margin':'10px', 'background-color':'#9f9',"border": "5px solid #090", 'border-radius':'30px'});
+                    $('#feedback').text('Your request has been started with ID number(s): ' + opstr + '. You will be emailed when your request is finished.');
+                  },
+                  error: function(output){
+                    $('#feedback').css({'color':'#d00'});
+                    // $('#feedback').css({'padding': '50px','margin':'10px', 'background-color':'#f99',"border": "5px solid #f00", 'border-radius':'30px'});
+                    $('#feedback').text('An error occurred. Did you fill out all the fields?');
+                  }});
+            });
+            $('body').find('input[type=email]').attr({"placeholder":"email@address.here"});
+            $('body').find('div.grid-div').find('input[type=text], input[type=email], textarea').val("0.00");
+            $('input[type=radio][value=BIO]').attr({'disabled':'true'});
+          });
+      $('.rmScen').on('click', function() {
+          var index = $('ul.scenario').length; // Count up all scenarios
+          if (index > 1) {
+              $(this).parents('ul').remove();
+          }
+          else {
+              alert("Alert: must have at least one scenario.");
+          }
+      });
+      $('.rmRow').on('click', function() {
+        // $('body').css('background-color', '#0f0');
+        var index = ($(this).parents('div.grid-div').find('ul.grid').length) - 1;
+        if (index <= 1) {
+            alert("Alert: must have at least one row per scenario");
+        }
+        else {
+            $(this).parents('ul.grid').remove();
+        }
+      });
+      // $('.reset').on('click', function() {
+      //   $(this).parent().find('ul.grid input[type=text]').val("0.00");
+      // });
+	  $('.reset').on('click', function() {
+	  	var val = $(this).parent().find('input.resetVal').val();
+	  	$(this).parent().find('ul.grid input[type=text]').val(val);
+	  });
+	  $('.setRowSel').on('change', function() {
+	  	var row = $(this).parent().find('select.setRowSel').val();
+	  	var val = $(this).siblings('input.setRowVal').val();
+	  	var rows = $(this).parent().find('div.grid-div').find('select');
+	  	rows.each(function(i, v) {
+	  		if (String(row) == "All") {
+	  			$(v).parent().find('input[type=text]').val(val);
+	  		}
+	  		else if (String(v['value']) == String(row)) {
+	  			$(v).siblings('input[type=text]').val(val);
+	  		}});
+	  	  var obj = {};
+		  var rowids = $(this).parents('ul.scenario').find('.grid-div').find('select');
+		  rowids.each(function(i, v) {
+			  var a = [];
+			  $(v).siblings('input[type=text]').each(function(i, iv) {
+				a.push($(iv).val());
+			  });
+			  obj[$(v).val()] = a;
+		  });
+		  for (var i in obj) {
+		  	for (var j in obj.i) {
+		  		obj.i[j] = parseInt(obj.i[j]);
+		  	}
+		  }
+		  var id = $(this).parent().find('.chart_div').attr('id');
+		  drawGraph(formatPoints(obj));
+	  });
+	  $('input[type=text]').on('change', function() {
+	  	var row = $(this).siblings('select.setRowSel').val();
+	  	var val = $(this).val();
+	  	var rows = $(this).parent().find('div.grid-div').find('select');
+	  	rows.each(function(i, v) {
+	  		if (String(row) == "All") {
+	  			$(v).parent().find('input[type=text]').val(val);
+	  		}
+	  		else if (String(v['value']) == String(row)) {
+	  			$(v).siblings('input[type=text]').val(val);
+	  		}});
+	  	  var obj = {};
+		  var rowids = $(this).parents('ul.scenario').find('.grid-div').find('select');
+		  rowids.each(function(i, v) {
+			  var a = [];
+			  $(v).siblings('input[type=text]').each(function(i, iv) {
+				a.push($(iv).val());
+			  });
+			  obj[$(v).val()] = a;
+		  });
+		  for (var i in obj) {
+		  	for (var j in obj.i) {
+		  		obj.i[j] = parseInt(obj.i[j]);
+		  	}
+		  }
+		  var id = $(this).parent().find('.chart_div').attr('id');
+		  drawGraph(formatPoints(obj));
+	  });
+	  $('.graphUpdate').on('click', function() {
+	  	  var obj = {};
+		  var rowids = $(this).parents('ul.scenario').find('.grid-div').find('select');
+		  rowids.each(function(i, v) {
+			  var a = [];
+			  $(v).siblings('input[type=text]').each(function(i, iv) {
+				a.push($(iv).val());
+			  });
+			  obj[$(v).val()] = a;
+		  });
+		  for (var i in obj) {
+		  	for (var j in obj.i) {
+		  		obj.i[j] = parseInt(obj.i[j]);
+		  	}
+		  }
+		  var id = $(this).parent().find('.chart_div').attr('id');
+		  drawGraph(formatPoints(obj));
+	  });
+
+	</script>
+	
+	<!-- I copied the HTML from the webDICE page and left a lot of it in here, these equals signs were just a visual divider between my code and the webDICE page's. -->
+
+	<!-- 
+	========================================================================================================================
+	========================================================================================================================
+	========================================================================================================================
+	========================================================================================================================
+	========================================================================================================================
+	-->
+	
+	<!-- <ul id="help-menu">
+	  <li id="display-help">Documentation<ul>
+	    <li><a target="_blank" href="/static/docs/webdice_basic_help.pdf">Basic</a></li>
+	    <li><a target="_blank" href="/static/docs/webdice_intermediate_help.pdf">Intermediate</a></li>
+	    <li><a target="_blank" href="/static/docs/webdice_equation_help.pdf">Equations</a></li>
+	  </ul></li>
+	  <li id="view-source"><a href="https://www.github.com/RDCEP/chicagowebdice/" target="_blank">View Source</a></li>
+	</ul> -->
+
+<!--<div id="sidebar">
+
+  <form id="submission" method="post" class="basic" action="/">
+    <div id="parameters" class="has-tabs">
+      <div id="sidebar-tabs" class="tabs">
+        <a href="" class="selected" id="link-to-tab-policy">Policy</a>
+        <a href="" id="link-to-tab-beliefs">Beliefs</a>
+      </div>
+      
+      <div id="tab-policy" class="tab selected">
+        
+        <h2><input type="radio" value="default" name="policy_type" style="width:auto" checked="checked"/>
+          <span class="help-button">?</span>Business as usual</h2>
+        
+        <h2><input type="radio" value="carbon_tax" name="policy_type" style="width:auto"/>
+          Simulated carbon tax</h2>
+        <ul>
+          
+          <li class="disabled init-disabled" >
+            
+            <label title="">2050
+            
+            <span class="label">
+              <span class="label-number">0</span><span>$/t</span>
+            </span>
+            
+            </label>
+            <input name="c2050" type="range" min="0" max="500" value="0" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="">2100
+            
+            <span class="label">
+              <span class="label-number">0</span><span>$/t</span>
+            </span>
+            
+            </label>
+            <input name="c2100" type="range" min="0" max="500" value="0" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="">2150
+            
+            <span class="label">
+              <span class="label-number">0</span><span>$/t</span>
+            </span>
+            
+            </label>
+            <input name="c2150" type="range" min="0" max="500" value="0" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li></ul>
+        <h2><input type="radio" value="treaty" name="policy_type" style="width:auto"/>
+          <span class="help-button">?</span>Simulated climate treaty</h2>
+        
+        <h2>Limitations on emissions (as a percent of 2005 emissions)</h2>
+        <ul>
+          
+          <li class="disabled init-disabled" >
+            
+            <label title="The mandated decrease in emissions by 2050 as a share of 2005 year emissions.
+">2050
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="e2050" type="range" min="0" max="100" value="0" step="5" data-prec="0" disabled="disabled" class="reverse"/>
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="The mandated decrease in emissions by 2100 as a share of 2005 year emissions.
+">2100
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="e2100" type="range" min="0" max="100" value="0" step="5" data-prec="0" disabled="disabled" class="reverse"/>
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="The mandated decrease in emissions by 2150 as a share of 2005 year emissions.
+">2150
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="e2150" type="range" min="0" max="100" value="0" step="5" data-prec="0" disabled="disabled" class="reverse"/>
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:-50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li></ul>
+        <h2>Participation</h2>
+        <ul>
+          
+          <li class="disabled init-disabled" >
+            
+            <label title="Participation in the climate treaty by 2050.">2050
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="p2050" type="range" min="0" max="100" value="100" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="Participation in the climate treaty by 2100.">2100
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="p2100" type="range" min="0" max="100" value="100" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li>
+          <li class="disabled init-disabled" >
+            
+            <label title="Participation in the climate treaty by 2150.">2150
+            
+            <span class="label">
+              <span class="label-number">100</span><span>%</span>
+            </span>
+            
+            </label>
+            <input name="p2150" type="range" min="0" max="100" value="100" step="10" data-prec="0" disabled="disabled" />
+            
+            <div class="tick-wrap">
+              <span class="tick" style="left:50%" >&bullet;</span>
+            </div>
+            
+            
+            
+            
+            </li></ul>
+        <h2><input type="radio" value="optimized" name="policy_type" style="width:auto"/>
+          <span class="help-button">?</span>Optimized policy</h2>
+        
+      </div>
+    
+      <div id="tab-beliefs" class="tab notselected">
+        
+        <h2>Your beliefs about the climate and the future</h2>
+        <ul>
+          
+          <li>
+            
+            <label title="Temperature increase in degrees C from doubling of atmospheric CO2
+">Climate sensitivity: How much will temperatures go up?
+            
+            </label>
+            <input name="temp_co2_doubling" type="range" min="1" max="5" value="3" step="1" data-prec="0"  />
+            
+            <div class="minimum-range-value">Less than expected</div>
+            <div class="maximum-range-value">More than expected</div>
+            
+            
+            
+            <span class="help-button">?</span>
+            </li>
+          <li>
+            
+            <label title="Increase in harms from climate change due to an increase in temperatures
+">How large will the harms be?
+            
+            </label>
+            <input name="damages_exponent" type="range" min="1" max="5" value="3" step="1" data-prec="0"  />
+            
+            <div class="minimum-range-value">Less harm</div>
+            <div class="maximum-range-value">More harm</div>
+            
+            
+            
+            <span class="help-button">?</span>
+            </li>
+          <li>
+            
+            <label title="Decline in the rate of growth in productivity over time">Decline in rate of growth of productivity
+            
+            </label>
+            <input name="productivity_decline" type="range" min="1" max="5" value="3" step="1" data-prec="0"  />
+            
+            <div class="minimum-range-value">Slower growth</div>
+            <div class="maximum-range-value">Faster growth</div>
+            
+            
+            
+            <span class="help-button">?</span>
+            </li>
+          <li>
+            
+            <label title="Rate of decline in energy use per $ of GDP">Change in energy efficiency
+            
+            </label>
+            <input name="intensity_decline_rate" type="range" min="1" max="5" value="3" step="1" data-prec="0"  />
+            
+            <div class="minimum-range-value">Less energy efficient</div>
+            <div class="maximum-range-value">More energy efficient</div>
+            
+            
+            
+            <span class="help-button">?</span>
+            </li>
+          <li>
+            
+            <label title="Cost of replacing all emissions in 2012 $ per ton of CO_{2}, relative to future cost
+">How low will the costs of renewables go?
+            
+            </label>
+            <input name="backstop_ratio" type="range" min="1" max="5" value="3" step="1" data-prec="0"  />
+            
+            <div class="minimum-range-value">Less expensive</div>
+            <div class="maximum-range-value">More expensive</div>
+            
+            
+            
+            <span class="help-button">?</span>
+            </li></ul>
+      </div>
+    
+    </div>
+    <div id="controls">
+      <input type="reset" id="reset-inputs" value="Reset Inputs"/>
+      <input type="submit" id="delete-all" value="Clear Graphs" disabled="disabled"/>
+      <input type="submit" value="Run Model"/>
+    </div>
+    <input type="hidden" name="carbon_model" value="dice_carbon">
+    <input type="hidden" name="damages_model" value="dice_damages">
+  </form>
+  <ul id="runs"></ul>
+
+</div> -->
+<!-- <div id="content" class="hasnoruns">
+  <div class="tabs">
+    <a href="#" id="link-to-essential-graphs" class="selected">Essential</a>
+    <a href="#" id="link-to-climate-graphs">Climate</a>
+    <a href="#" id="link-to-economy-graphs">Economy</a>
+    <a href="#" id="link-to-policy-graphs">Policy</a>
+    <a href="#" id="link-to-custom-graph">Customizable</a>
+    <a href="#" id="link-to-scc-graph">SCC</a>
+  </div>
+  <div class="initial">
+  
+  </div>
+  <div id="essential-graphs" class="tab selected"></div>
+  <div id="climate-graphs" class="tab notselected"></div>
+  <div id="economy-graphs" class="tab notselected"></div>
+  <div id="policy-graphs" class="tab notselected"></div>
+  <div id="custom-graph" class="tab notselected">
+    <div id="large-graph">
+        <div id="large-graph-chart" style="height:90%;"></div>
+        <div id="large-graph-zoom" style="height:10%;"></div>
+    </div>
+    <div id="graph-controls">
+      <div>
+        <h2>X-Axis</h2>
+        <select id="select-x-axis">
+          <option value="year">Year</option>
+<optgroup label="-- User-controlled Inputs --"></optgroup>
+  <option value="productivity">Total Factor Productivity</option>
+  <option value="backstop">Clean Energy Costs</option>
+  <option value="carbon_intensity">Carbon Intensity</option>
+  <option value="population">Labor Supply</option>
+  <optgroup label="-- Economic Results --"></optgroup>
+  <option value="consumption_pc">Consumption per Capita</option>
+  <option value="consumption">Total Consumption</option>
+  <option value="damages">Damages</option>
+  <option value="emissions_total">Total Emissions per Year</option>
+  <option value="emissions_ind">Industrial Emissions</option>
+  <option value="carbon_emitted">Total Carbon Emitted</option>
+  <option value="capital">Capital Stock</option>
+  <option value="utility_discounted">Utility Discounted</option>
+  <option value="utility">Utility</option>
+  <option value="scc">Social Cost of Carbon</option>
+  <optgroup label="-- Emissions Controls --"></optgroup>
+  <option value="abatement">Abatement</option>
+  <option value="miu">Emissions Control Rate</option>
+  <option value="output_abate">Abatement Cost as a Percentage of Output</option>
+  <option value="tax_rate">Tax Rate</option>
+  <optgroup label="-- Carbon Cycle --"></optgroup>
+  <option value="mass_atmosphere">Carbon Mass in Atmosphere</option>
+  <option value="mass_upper">Carbon Mass in Upper Oceans</option>
+  <option value="mass_lower">Carbon Mass in Lower Oceans</option>
+  <option value="temp_atmosphere">Atmospheric Temperature Increase</option>
+  <option value="temp_lower">Lower Ocean Temperature Increase</option>
+  <optgroup label="-- Test --"></optgroup>
+  <option value="consumption_discount">Consumption Discount</option>
+  
+         </select>
+         <label><input type="checkbox" id="logarithmic-x"/> Logarithmic</label>
+      </div>
+      <div>
+        <h2>Y-Axis</h2>
+        <select id="select-y-axis">
+<optgroup label="-- User-controlled Inputs --"></optgroup>
+  <option value="productivity">Total Factor Productivity</option>
+  <option value="backstop">Clean Energy Costs</option>
+  <option value="carbon_intensity">Carbon Intensity</option>
+  <option value="population">Labor Supply</option>
+  <optgroup label="-- Economic Results --"></optgroup>
+  <option value="consumption_pc">Consumption per Capita</option>
+  <option value="consumption">Total Consumption</option>
+  <option value="damages">Damages</option>
+  <option value="emissions_total">Total Emissions per Year</option>
+  <option value="emissions_ind">Industrial Emissions</option>
+  <option value="carbon_emitted">Total Carbon Emitted</option>
+  <option value="capital">Capital Stock</option>
+  <option value="utility_discounted">Utility Discounted</option>
+  <option value="utility">Utility</option>
+  <option value="scc">Social Cost of Carbon</option>
+  <optgroup label="-- Emissions Controls --"></optgroup>
+  <option value="abatement">Abatement</option>
+  <option value="miu">Emissions Control Rate</option>
+  <option value="output_abate">Abatement Cost as a Percentage of Output</option>
+  <option value="tax_rate">Tax Rate</option>
+  <optgroup label="-- Carbon Cycle --"></optgroup>
+  <option value="mass_atmosphere">Carbon Mass in Atmosphere</option>
+  <option value="mass_upper">Carbon Mass in Upper Oceans</option>
+  <option value="mass_lower">Carbon Mass in Lower Oceans</option>
+  <option value="temp_atmosphere">Atmospheric Temperature Increase</option>
+  <option value="temp_lower">Lower Ocean Temperature Increase</option>
+  <optgroup label="-- Test --"></optgroup>
+  <option value="consumption_discount">Consumption Discount</option>
+  
+        </select>
+        <label><input type="checkbox" id="logarithmic-y"/> Logarithmic</label>
+      </div>
+      <div>
+        <h2>Labels</h2>
+        <select id="series-labels">
+          <option value="none">None</option>
+          <option value="years">Years</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div id="scc-graph" class="tab notselected">
+  </div>
+  <form method="post" id="download-data" action="/csv" target="_blank">
+    <textarea name="data" id="download-textarea"></textarea>
+    <input type="submit" value="Download Selected Runs as CSV"/>
+  </form>
+</div>
+<div id="help-wrapper">
+
+  
+    
+      <div class="help-text" id="default-help">
+        <p>Business as usual simulates the model with no political restraint on  carbon emissions.  Projections are solely based on the values for  other parameters selected by the user.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <div class="help-text" id="treaty-help">
+        <p>The simulated climate treaty approximates an international agreement  wherein specific emissions targets are established.  These targets  represent a fraction of 2005 emissions that would be permitted in and  after a given time period.  For example, selecting a value of 25% implies  a 75% decrease in emissions from 2005 levels.  The user can select a level  of emissions reductions for each of three time periods after, 2050,  2100 and 2150.</p>
+<p>The user can also select the level of participation in the selected treaty.   This parameter will not change the level of emissions relative to 2005 as  selected in the climate treaty, but will affect the cost of compliance  (as reflected by increased abatement costs).</p>
+<p></p>
+
+      </div>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <div class="help-text" id="optimized-help">
+        <p>In optimization mode, webDICE finds the price of carbon that will maximize  global welfare given the user-specified parameters.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="temp_co2_doubling-help">
+        <p>Climate Sensitivity estimates the extent to which the global mean temperature increases when we add greenhouse gasses to the atmosphere. This metric is defined as the temperature increase from doubling the carbon dioxide concentration in the atmosphere relative to the concentration prior to the industrial revolution.  By adjusting the slider you can discover how different levels of temperature increases affect economic activities and how these economic activities in turn effect climate.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="damages_exponent-help">
+        <p>This model assumes that an increase in global mean temperature will harm the economy.  By adjusting this slider, you can not only discover the various degrees to which increasing temperature can affect the economy, but you can also estimate how these economic damages will in turn affect the climate.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      <div class="help-text" id="abatement_exponent-help">
+        <p>The cost of reducing emissions will increase as we try to reduce a greater percentage of the total. Small reductions, such as through efficiency improvements, may be relatively easy while large reductions, such as eliminating most uses of fossil fuels, will be expensive. You can set how fast the costs of emissions reductions go up as we try to eliminate a greater percentage of emissions. The higher the number, the faster costs increase.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="backstop_decline-help">
+        <p>The model assumes that the cost of replacing all fossil fuels with zero-carbon energy will cost $1,170 per ton of CO2 today but that these costs will decline over time. You can set the speed of this decline anywhere from 0% (these costs never go down) to 20% per year, the most optimistic case.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="backstop_ratio-help">
+        <p>We do not know what the costs of zero-carbon energy will ultimately be. The lower the cost of zero-carbon technologies, the cheaper emissions reductions will be.  Adjust the slider to reflect your beliefs on how low the cost of zero-carbon energy will be and to discover how these costs affect climate and the economy.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="productivity_decline-help">
+        <p>This metric represents the decline in the rate of growth of productivity over time.  This model assumes that the ability to produce goods with a given amount of capital and labor increases over time.  However, the rate at which growth of production increases is decreasing.  Faster growth indicates optimism in the continued ability to produce goods efficiently. Slower growth indicates that productivity will decrease over time.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="depreciation-help">
+        <p>As capital (buildings, machines, factories and similar items) is used, it wears out. The model assumes that it wears out at a rate of 10% per year. You can choose a value between 8% per year and 20% per year.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="savings-help">
+        <p>The model assumes that people save 22% of their incomes each year. Savings rate do not adjust based on expectations of future events, so that, for example, if you set the harms from climate change to be high, people do not save more so that they will have a cushion to offset the harms. You can adjust the savings rate to be anything from 10% to 25%.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="popasym-help">
+        <p>The population has been growing but as people get wealthier, the rate of growth has slowed down and demographers think that eventually it may stabilize. You can choose the level it stabilizes at, the maximum population, to be anything from 8 billion people to 12 billion people. The default value is 8.6 billion people.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="intensity_decline_rate-help">
+        <p>Energy intensity is the emissions per unit of economic output.  As energy efficiency increases energy intensity decreases; with increased efficiency less energy is used to produce output, resulting in fewer emissions. Adjust the slider to discover how energy intensity can affect future emissions and their economic impacts.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="fosslim-help">
+        <p>Fossil fuel is a non-renewable resource. The total amount of fossil fuel available puts a cap on total emissions. Under most scenarios, we do not reach this cap by 2200 so the cap has no effect on the output, but if the economy grows quickly and energy intensity does not decline very much, we may hit the cap. The default value is that there are 6,000 gigatons of carbon (Gt C) contained in unrecovered fossil fuels. You can choose a lower value, 5000 Gt C, based on the assumption that some portion of the reserves will not be recoverable, or a higher value, up to 9,000 Gt C, based on the assumption that we will continue to discover new sources of fossil fuels.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="elasmu-help">
+        <p>As they become wealthier, most people value an additional dollar of wealth less than when they were poor. A poor person may greatly value an additional dollar to pay for necessities, while someone who has these necessities may value the additional dollar less. This may not be uniformly true but it is thought to be true for most of the population. You can set how fast the value of an additional dollar declines from less, by setting the value to 1.0, to more, by setting the value to 3.0.</p>
+<p></p>
+
+      </div>
+    
+  
+    
+      <div class="help-text" id="prstp-help">
+        <p>The model finds the optimal controls on emissions by finding the controls that maximize the welfare of the people alive during the modeled years. For this purpose, the model considers people living from now until 600 years from now. The pure rate of time preference is a discount rate which allows you to account for the fact that some people will be living in the distant future. The value of the pure rate of time preference is highly contested and many people believe that it is unethical to weight people less because they live in the future while others believe that it is appropriate and consistent with how people actually make choices. The default value is 1.5% but you can set it anywhere from 0% to 10%.</p>
+<p></p>
+
+      </div>
+    
+  
+
+</div>-->
+
+
+<!-- <script src="/static/js/webdice_help.js"></script> -->
+
+
+
+</body>
+</html>

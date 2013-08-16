@@ -1,0 +1,308 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forms -- CIM-EARTH</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/gridstyle.css') }}" type="text/css">
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+  <script>
+
+    var models = new Array('TRADE', 'BIO', 'ENERGY', 'LIFE');
+  	var countries = new Array('United States','Mexico','Canada','Oceania','Japan','China and East Asia','Southeast Asia','India','Rest of South Asia','Brazil','Latin America','Western Europe','Central Europe','Mid-East and N Africa','Sub-Saharan Africa','Russia+');
+    var commodities = new Array('Agriculture and Forestry', 'Oil', 'Natural Gas', 'Coal', 'Petroleum', 'Other Manufacturing', 'Chemicals', 'Cement/mineral Products', 'Iron and Steel', 'Nonferrous Metal', 'Electricity', 'Elec-Wind', 'Elec-Solar', 'Elec-Nuclear', 'Elec-Hydro', 'Coal-fired Power', 'Base Gas', 'Peak Gas', 'Peak Oil', 'Transmission', 'Land Transport', 'Air Transport', 'Sea Transport', 'Other Services', 'Government Services', 'Investment'); // These are all electricity sources, maybe indicate that to users
+    var regionsArr = new Array('AFR','BRA', 'CAN', 'EAA', 'IND', 'JAP', 'LAM', 'MEX', 'MNA', 'OCN', 'REU', 'RUS', 'SEA', 'SOA', 'USA', 'WEU');
+    var years = new Array();
+
+    for (var i=4; i<=24; i++) {
+        years.push(2000 + i);
+    }
+
+    function drawArr(list, object) {
+        for (var k=0; k<list.length; k++) {
+            object.append("<input type='checkbox' name='" + String(list[k]) +  "'>" + String(list[k]));
+        }
+    }
+
+    function drawModels(models) {
+        for (var m=0; m<models.length; m++) {
+            $('.models').append("<input type='radio' name='model' value='"+models[m]+"'>" + String(models[m]));
+        }
+    }
+
+  	function drawForm() {
+  		for (var j=0; j<countries.length; j++) {
+            document.write(countries[j] + "<input type='checkbox' name='"+countries[j]+"'>");
+        }
+  	}
+  
+  </script>
+
+  <script src="{{ url_for('static', filename='js/gridscript.js') }}"></script>
+
+  <style>
+
+      #formdiv{
+        width: 90%;
+      }
+
+      .scenario input[type='checkbox']{
+          margin-left: 5px;
+          margin-right: 2px;
+      }
+
+      .scenario input[type='radio']{
+          margin-left: 8px;
+          margin-right: 3px;
+      }
+
+      .scenario input[type='text']{
+          width: 180px;
+          margin-left: 5px;
+      }
+
+      .title{
+          font-family: sans-serif;
+          padding-left: 3px;
+          padding-right: 2px;
+      }
+
+      li{
+        margin-bottom: 5px;
+      }
+
+      textarea{
+        display: block;
+        resize:none;
+      }
+
+      /*Big flashy CSS*/
+      #feedback{
+        font-size: 2.5em;
+        font-family: arial;
+        text-align: center;
+      }
+
+      /*h1{
+        background:url(https://github.com/RDCEP/chicagowebdice/blob/master/static/images/header.png?raw=true);
+        width: 100%;
+      }*/
+
+      /*#heading{
+        position:absolute;top:0;left:0;right:0;padding:0 1em;font:bold 2em/3.5em
+        Helvetica,sans-serif;
+      }
+
+      #heading{
+        color:white;text-shadow:0 0 5px #444;border-bottom:1px solid
+      #262;margin-top:-1px;
+      }
+
+      #heading span{
+        background:20px 8px url(https://github.com/RDCEP/chicagowebdice/blob/master/static/images/RDCEP.png?raw=true)
+      no-repeat;display:block;float:left;
+      }
+
+      #heading
+      span{
+        padding-left:180px;height:150px;margin-bottom:-100px;margin-right:0.5ex;
+      }
+
+      #heading span{
+        position:relative;z-index:100;
+      }*/
+
+  </style>
+
+
+</head>
+
+<body>
+    <h1 id="heading"> <span>RDCEP</span> :: ASCEF Scenario Submission Page</h1>
+    <div id="feedback"></div>
+    <div id="formdiv">
+        <form id="form" method="POST" action="output" onSubmit="return false">
+          <span class="title">Email: <input type="email" id="email" name="email" action="output"></span><br>
+          <span class="title">Choose a Model:</span><br>
+          <span class="models"></span>
+          <hr>
+          <ul class="scenario" id="scenario-1">
+                <!-- <li class="years"><span class="title">Years: </span></li> -->
+                <li>
+                    <span class="title">Scenario Name: </span>
+                    <input type="text" name="name" class="name" placeholder="Scenario 1">
+                </li>
+                <li>
+                    <span class="title">Description: </span>
+                    <textarea rows=3 cols=50 name="description" class="description" placeholder="Scenario 1 Description"></textarea>
+                </li>
+                <!-- <li class="countries"><span class="title">Countries: </span></li> -->
+                <!-- <li class="commodities"><span class="title">Commodities: </span></li> -->
+                <br>
+                <div class="grid-div">
+                  Enter your carbon taxes here. Data points are in $1000/tCO2. <b>Assigning a region to >1 row will not work.</b> <br><br>
+                  Plot points by region/year.<br><br>
+                  <script>gridDraw();</script>
+                </div>
+                <br>
+                <input class="addRow" type="button" value="add row">
+                <input type="button" class="rmScen" value="remove scenario">
+                <input type="button" class="reset" value="set all 0"></input>
+                <hr><hr><hr>
+            </ul>
+        </form>
+    </div>
+
+    <input id="addScen" type="button" value=" + " style="font-size: 2em;">
+    <br>
+    <input type="button" id="submitAll" value="Submit" style="font-size: 2em;">
+    <br>
+    <!-- <input id="arrbutt" type="button" value="arrbutt"></input> -->
+<!-- What's being set is a Carbon Tax. Plot points of *tax by year by region*. On old page, column headers get *years* | Maybe auto-fill description field based on plugged data points -->
+<!-- GUI will eventually write a shell script with a descriptive name of the scenario being run. First file to worry about auto-creating is the .dat file -->
+    <script>
+      drawModels(models);
+      // drawArr(years, $('li.years'));
+      // drawArr(countries, $('li.countries'));
+      // drawArr(commodities, $('li.commodities'));
+
+      $(document).ready(function() {
+            var row = $('ul.grid input[type=text]').parents('ul.grid').clone(true, true);
+            var scenCount = 1;
+            $('.addRow').on('click', function() {
+                
+                var rowCount = $(this).parent().find('.grid-div ul.grid').length;/* Parent of "this" is current scenario, find children that are rows *//* Number of "ul.grid"s represents number of rows */ /* Account for first row, "yearspan" */
+                var newrow = row.clone(true, true);
+                if (rowCount >= (regionsArr.length)+1) {
+                    alert("Alert: Too many rows");
+                }
+                else {
+                    newrow.find('input').attr('name', function(i, val) {
+                        return val + '-' + scenCount + '-' + rowCount;
+                    });
+                    newrow.find('select').attr('name', function(i, val) {
+                        return val + '-' + rowCount;
+                    });
+                    newrow.find('select').children('option').eq(rowCount-1).attr('selected', true);
+                    newrow.appendTo($(this).parent().find('.grid-div'));
+                    
+                }
+
+            });
+            var scen = $('#scenario-1').clone(true, true); // Set aside clone of scenario with standalone names ('name', 'description', '0', etc.)
+            $('#scenario-1').find('input').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 input names
+            });
+            $('#scenario-1').find('textarea').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 description name
+            });
+            $('#scenario-1').find('select').attr('name', function(i, val) {
+              return val + '-' + scenCount; // Append '-1' to scenario 1 description name
+            });
+    		    $('#addScen').on('click', function() {
+                  scenCount++;
+                  var newscen = scen.clone(true, true);
+                  $("#form").append(newscen);
+                  var index = $('ul.scenario').length; // Count clones
+                  var inputs = newscen.find('input'); // Grab all inputs in current clone
+                  inputs.attr('name', function(i, val) {
+                      return val + '-' + scenCount; // Add -X to all input names (eg, 2004 -> 2004-1)
+                  });
+                  newscen.find('textarea').attr('name', function(i, val) {
+                      return val + '-' + scenCount;
+                  });
+                  newscen.attr('id','scenario-' + scenCount);
+                  newscen.find('select').attr('id','select-' + scenCount);
+                  newscen.find('input.name').attr({'placeholder':'Scenario ' + String(scenCount)});
+                  newscen.find('textarea').attr({'placeholder':'Scenario ' + String(scenCount) + ' Description'});
+                  newscen.find('select').attr('name', function(i, val) {
+                    return val + '-' + scenCount;
+                  });
+              
+            });
+            
+            $('#submitAll').on('click', function() {
+                var scenObj = {};
+                scenObj['model'] = $('input[type=radio]:checked').val();  
+                scenObj['email'] = $('input#email').val();
+                $('ul.scenario').each(function() {
+                  var rowObj = {};
+                  rowObj["Name"] = $(this).find('.name').val();
+                  rowObj["Description"] = $(this).find('.description').val();
+                  $('span.row').each(function(i) {
+                    var smallArr = new Array();
+                    $(this).children('input[type=text]').each(function(i) {
+                      smallArr.push($(this).val());
+                    });
+                    rowObj[$(this).children('select').val()] = smallArr;
+                  });
+                  scenObj[$(this).attr('id')] = rowObj;
+                });
+                alert('thank you!');
+                // document.write(JSON.stringify(scenObj));
+                $.ajax({  type: "POST",
+                  url: "output",
+                  data: JSON.stringify(scenObj),
+                  dataType: "json",
+                  headers: { "Content-Type": "application/json", "Accept": "application/json" },
+                  success: function(output) {
+                    $('#feedback').css({'color':'#080'});
+                    var opstr = '';
+                    for (var i=0; i<output['id'].length; i++) {
+                      opstr += output['id'][i] + ', ';
+                    }
+                    opstr = opstr.substring(0, opstr.length - 2);
+                    $('#feedback').css({'padding': '50px 0px','margin':'10px', 'background-color':'#9f9',"border": "5px solid #090", 'border-radius':'30px'});
+                    $('#feedback').text('Your request has been started with ID number(s): ' + opstr + '. You will be emailed when your request is finished.');
+                  },
+                  error: function(output){
+                    $('#feedback').css({'color':'#f00'});
+                    // Big flashy CSS // $('#feedback').css({'padding': '50px 0px','margin':'10px', 'background-color':'#f99',"border": "5px solid #f00", 'border-radius':'30px'});
+                    $('#feedback').text('An error occurred. Did you fill out all the fields?');
+                  }});
+            });
+            $('body').find('input[type=text], input[type=email], textarea').val('foo');
+            $('body').find('div.grid-div').find('input[type=text], input[type=email], textarea').val(0);
+            $('input[type=radio][value=BIO]').attr({'disabled':'true'});
+          });
+
+      $('.rmScen').on('click', function() {
+          var index = $('ul.scenario').length; // Count up all scenarios
+          if (index > 1) {
+              $(this).parents('ul').remove();
+          }
+          else {
+              alert("Alert: must have at least one scenario.");
+          }
+      });
+      $('.rmRow').on('click', function() {
+        // $('body').css('background-color', '#0f0');
+        var index = ($(this).parents('div.grid-div').find('ul.grid').length) - 1;
+        if (index <= 1) {
+            alert("Alert: must have at least one row per scenario");
+        }
+        else {
+            $(this).parents('ul.grid').remove();
+        }
+      });
+      $('.reset').on('click', function() {
+        $(this).parent().find('ul.grid input[type=text]').val(0);
+      });
+
+      // $('select').change(function() {
+      //   var selected = $(this).options[$(this).selectedIndex].value;
+      //   var selparent = $(this).parent();
+      //   var boxes selparent.find('input[type=text]');
+      //   boxes.attr('name', function(i, val) {
+      //     return val + '-' + selected
+      //   });
+      // });
+
+        /* On removing scenarios: if id numbers are to be reset by order, setting an index by counting must be used. If id numbers are to be conserved, a counter must be used. */
+
+	</script>
+
+</body>
+</html>

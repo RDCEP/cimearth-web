@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>(Nate's) CIM-EARTH</title>
+  <script>
+
+  </script>
+  <style>
+      /* #models li{
+			font-weight: bold;
+			font-size: 1.5em;
+			display: inline;
+			min-width: auto;
+		} */
+    .scenario input[type='checkbox']{
+      margin-left: 5px;
+      margin-right: 2px;
+    }
+    .scenario input[type='radio']{
+      margin-left: 8px;
+      margin-right: 3px;
+    }
+    .scenario input[type='text']{
+      width: 180px;
+      margin-left: 5px;
+    }
+    .scenario .title{
+      font-family: sans-serif;
+      padding-left: 3px;
+      padding-right: 2px;
+    }
+  </style>
+</head>
+<body>
+<div id="formdiv">
+<form id="original" class="scenario">
+  <ul>
+    <li class="models">
+    </li>
+    <li class="years">
+      <span class="title">Years: </span>
+    </li>
+    <li>
+      <span class="title">Name: </span>
+      <input type="text" name="name">
+    </li>
+    <li>
+      <span class="title">Description: </span>
+      <textarea rows=3 cols=50 name="description" style="display: block;"></textarea>
+    </li>
+    <li class="countries">
+      <span class="title">Countries: </span>
+    </li>
+    <li class="commodities">
+      <span class="title">Commodities: </span>
+    </li>
+    <hr>
+  </ul>
+</form>
+</div>
+<input type="button" value="+" style="font-size: 2em;">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  var models = new Array('TRADE', 'BIO', 'ENERGY', 'LIFE');
+  var countries = new Array('United States','Mexico','Canada','Oceania','Japan','China and East Asia','Southeast Asia','India','Rest of South Asia','Brazil','Latin America','Western Europe','Central Europe','Mid-East and N Africa','Sub-Saharan Africa','Russia+');
+  var commodities = new Array('Agriculture and Forestry', 'Oil', 'Natural Gas', 'Coal', 'Petroleum', 'Other Manufacturing', 'Chemicals', 'Cement/mineral Products', 'Iron and Steel', 'Nonferrous Metal', 'Electricity', 'Wind', 'Solar', 'Nuclear', 'Hydro', 'CFP', 'BGA', 'PGA', 'POI', 'TRN', 'Land Transport', 'Air Transport', 'Sea Transport', 'Other Services', 'Government Services', 'INV');
+  var years = [];
+  for (var i=4; i<=24; i++) {
+    years.push(2000 + i);
+  }
+  function drawArr(list, object) {
+    for (var k=0; k<list.length; k++) {
+      object.append("<input type='checkbox' name='" + String(list[k]) +  "'>" + String(list[k]));
+    }
+  }
+  function drawModels(models) {
+    for (var m=0; m<models.length; m++) {
+      $('li.models').append("<input type='radio' name='model'>" + String(models[m]));
+    }
+  }
+  // It's cleaner to call these functions within the JavaScript rather than within the HTML
+  drawModels(models);
+  drawArr(years, $('li.years'));
+  drawArr(countries, $('li.countries'));
+  drawArr(commodities, $('li.commodities'));
+  var form = $('#original');
+  $('input[type=button]').click(function() {
+    var newform = form.clone();
+    var index = $('form.scenario').length; // Count clones
+    var inputs = newform.find('input'); // Grab all inputs in current clone
+    inputs.attr('name', inputs.attr('name') + '-' + index); // Add -X to all input names (eg, 2004 -> 2004-1)
+    $("#formdiv").append(newform);
+  });
+});
+</script>
+</body>
+</html>
